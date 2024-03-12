@@ -1,19 +1,30 @@
 import socket
 
-# Create a UDP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# handle work request
+# hashcat/johntheripper
+# bruteforce/wordlist
+# default wordlist/dictionary
+# communicate with worker
+# send response back to client
+# 
 
-# Bind the socket to a specific IP address and port
-server_address = ('localhost', 12345)
-sock.bind(server_address)
+class Server:
+    def __init__(self, address, port):
+        self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.serverAddress = (address, port)
+        self.serverSocket.bind(self.serverAddress)
 
-while True:
-    print('Waiting for a message...')
-    data, address = sock.recvfrom(1024)
-    
-    # Process the received data
-    # ...
+    def handle_request(self, data, address):
+        print('Received message:', data.decode(), 'from', address)
+        response = 'Received message: ' + data.decode() 
+        self.serverSocket.sendto(response.encode(), address)
 
-    # Send a response back to the client
-    response = 'Hello, client!'
-    sock.sendto(response.encode(), address)
+    def run(self):
+        while True:
+            print('Waiting for a message...')
+            data, address = self.serverSocket.recvfrom(1024)
+            self.handle_request(data, address)
+
+if __name__ == '__main__':
+    server = Server('localhost', 9090)
+    server.run()
