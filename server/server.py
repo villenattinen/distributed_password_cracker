@@ -19,6 +19,11 @@ class Server:
         response = 'Received message: ' + data.decode() 
         self.serverSocket.sendto(response.encode(), address)
 
+    def handle_response(self, data, address):
+        print('Received response:', data.decode(), 'from', address)
+        response = 'Received response: ' + data.decode() 
+        self.serverSocket.sendto(response.encode(), address)
+
     def run(self):
         while True:
             print('Waiting for a message...')
