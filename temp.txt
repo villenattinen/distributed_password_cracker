@@ -1,3 +1,12 @@
+client makes a request to the server
+server validates input
+server calculates keyspace to divide workload
+server spawns sufficient amount of nodes based on input
+communication between nodes and server ???
+job is finished through 1) match found 2) possibilities depleted
+server sends an off signal to nodes still running
+server informs the client of the result
+
 # PING
 # ACK
 # EXIT
