@@ -4,6 +4,12 @@ import time
 
 class Server:
     workerAddress = ('localhost', 8080)
+    commandResponsePairs = {
+        'PING': 'PONG',
+        'JOB': 'JOB',
+        'ACK_JOB': 'ACK_JOB'
+    }
+
     # Initialize the server class
     def __init__(self, address, port):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
