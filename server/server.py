@@ -3,6 +3,7 @@ import logging
 import time
 
 class Server:
+    workerAddress = ('localhost', 8080)
     # Initialize the server class
     def __init__(self, address, port):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -15,11 +16,17 @@ class Server:
         logging.info('Received: %s from %s', data.decode(), address)
         if data.decode() == 'PING':
             self.handle_response('PONG'.encode(), address)
-        self.handle_response(data, address)
+        elif data.decode() == 'JOB':
+            self.handle_response('JOB'.encode(), self.workerAddress)
+            self.handle_response('Job sent'.encode(), address)
+        elif data.decode() == 'ACK_JOB':
+            print('Job sent successfully')
+        else:
+            pass
 
     # Send a response
     def handle_response(self, data, address):
-        logging.info('Sending response: %s to %s', data.decode(), address)
+        logging.info('Sending message: %s to %s', data.decode(), address)
         self.serverSocket.sendto(data, address)
 
     # Run the server

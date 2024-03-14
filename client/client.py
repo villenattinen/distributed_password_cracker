@@ -24,6 +24,6 @@ class Client:
 if __name__ == '__main__':
     # Start the client
     client = Client('localhost', 9090)
-    client.send('PING')
+    client.send('JOB')
     print(client.receive())
     client.close()

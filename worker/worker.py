@@ -14,7 +14,13 @@ class Worker:
         print('Received:', data.decode(), 'from', address)
         if data.decode() == 'PING':
             self.handle_response('PONG'.encode(), address)
-        self.handle_response(data, address)
+        elif data.decode() == 'JOB':
+            # Thread to handle jobs
+            print('Starting job...')
+            self.handle_response('ACK_JOB'.encode(), address)
+        else:
+            pass
+
 
     # Send a response
     def handle_response(self, data, address):
@@ -29,11 +35,9 @@ class Worker:
 
 if __name__ == '__main__':
     # Start the worker
-    worker = Worker('localhost', 9090)
+    worker = Worker('localhost', 8080)
     # Thread to handle communication with the server
-    thread1 = threading.Thread(target=worker.run)
-    # Thread to handle jobs
-    #thread2 = threading.Thread(target=worker.handle_job)
+    #thread1 = threading.Thread(target=worker.run)
+    worker.run()
     # Start threads
-    thread1.start()
-    #thread2.start()
+    #thread1.start()
