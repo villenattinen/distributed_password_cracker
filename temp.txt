@@ -1,0 +1,32 @@
+# PING
+# ACK
+# EXIT
+
+# handle work request
+# hashcat/johntheripper
+# bruteforce/wordlist
+# default wordlist/dictionary
+# communicate with worker
+# send response back to client
+
+# docker run --rm -it <container> 
+# hashcat --keyspace -a 3 ?a?a?a -m 400
+# hashcat -a 3 -m 400 in.hash --skip 3009 --limit 6016  ?a?a?a
+
+#   $ hashcat -m value -a value hashfile wordlist -> -a 0 = dictionary mode, -m 0 = MD5, -m ignored = autodetect
+#   excluding combination attacks, mask attacks
+#   bruteforcing up to 8 characters
+
+#   $ john --format=value hashfile
+#   excluding zip-file, unshadow, etc.
+#   
+#   crack hashstring [] or crack -h/--help 
+#   --help/-h               display the options
+#   --hashcat/-cat          only crack using hashcat
+#   --johntheripper/-john   only crack using johntheripper
+#   --bruteforce/-bf        only crack using bruteforce
+#   --wordlist/-wl          only crack using wordlist
+#   --hashtype/-ht          specify the hash type manually
+#   --exit/e                exit the program
+
+# usage: ./client.py <server_address> <server_port> <hash> [<plaintext_length>]
