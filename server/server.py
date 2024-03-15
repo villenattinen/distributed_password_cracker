@@ -1,5 +1,6 @@
-import socket
 import logging
+import socket
+import sys
 import time
 
 class Server:
@@ -53,5 +54,5 @@ if __name__ == '__main__':
     logging.info('Launching server...')
 
     # Start the server
-    server = Server('localhost', 9090)
+    server = Server(sys.argv[1], sys.argv[2]) # 'localhost', 9090
     server.run()

@@ -1,5 +1,6 @@
 import socket
 import subprocess
+import sys
 import threading
 
 class Worker:
@@ -21,7 +22,6 @@ class Worker:
         else:
             pass
 
-
     # Send a response
     def handle_response(self, data, address):
         self.serverSocket.sendto(data, address)
@@ -35,7 +35,7 @@ class Worker:
 
 if __name__ == '__main__':
     # Start the worker
-    worker = Worker('localhost', 8080)
+    worker = Worker(sys.argv[1], sys.argv[2]) # 'localhost', 8080
     # Thread to handle communication with the server
     #thread1 = threading.Thread(target=worker.run)
     worker.run()

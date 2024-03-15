@@ -1,6 +1,7 @@
 import socket
+import sys
 # import time
-# import sys
+
 
 class Client:
     # Initialize the client class
@@ -23,7 +24,7 @@ class Client:
 
 if __name__ == '__main__':
     # Start the client
-    client = Client('localhost', 9090)
+    client = Client(sys.argv[1], sys.argv[2]) # 'localhost', 9090
     client.send('JOB')
     print(client.receive())
     client.close()
