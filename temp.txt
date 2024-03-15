@@ -7,6 +7,12 @@ job is finished through 1) match found 2) possibilities depleted
 server sends an off signal to nodes still running
 server informs the client of the result
 
+3-6 char passwords
+keyspace 3 chars: 9025
+keyspace 4 chars: 857375                                                                                                              
+keyspace 5 chars: 81450625
+keyspace 6 chars: 81450625
+
 # PING
 # ACK
 # EXIT
