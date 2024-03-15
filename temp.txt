@@ -7,15 +7,33 @@ job is finished through 1) match found 2) possibilities depleted
 server sends an off signal to nodes still running
 server informs the client of the result
 
+usage:
+start client with ./client.py <server_address> <server_port> <hash> [<plaintext_length>]
+start server with ./server.py <server_port>
+start workers with ./worker.py <server_address> <server_port>
+
 3-6 char passwords
 keyspace 3 chars: 9025
 keyspace 4 chars: 857375                                                                                                              
 keyspace 5 chars: 81450625
 keyspace 6 chars: 81450625
 
-# PING
-# ACK
-# EXIT
+protocol:
+MAGIC NUMBER + CLIENTID + COMMAND + PAYLOAD
+
+COMMANDS:
+CLIENT -> SERVER:
+Request: PING       Response: PONG
+Request: JOB        Response: ACK_JOB
+
+WORKER -> SERVER:
+Request: JOIN       Response: ACK
+Request: RESULT     Response: ACK
+
+SERVER -> WORKER:
+Request: PING       Response: IDLE/BUSY
+Request: JOB        Response: ACK_JOB
+Request: SHUTDOWN   Response: ACK
 
 # handle work request
 # hashcat/johntheripper
