@@ -7,11 +7,7 @@ import time
 class Server:
     workerNodes = {}
     requestClients = {}
-    commandResponsePairs = {
-        'PING': 'PONG',
-        'JOB': 'JOB',
-        'ACK_JOB': 'ACK_JOB'
-    }
+    result = None
 
     # Initialize the server class
     def __init__(self, address, port):
@@ -19,35 +15,86 @@ class Server:
         self.serverAddress = (address, port)
         self.serverSocket.bind(self.serverAddress)
 
-    def add_node(self, address):
-        nodeId = random.randbytes(4).hex()
-        self.workerNodes[nodeId] = address
-        return nodeId
-
     # Handle incoming requests
     def handle_request(self, data, address):
         print('Received:', data.decode(), 'from', address)
         logging.info('Received: %s from %s', data.decode(), address)
-        requestNodeId, requestCommand = data.decode().split(':')        
+        requestNodeId, requestCommand, payload = data.decode().split(':')
+
+        # Check the request type
+
+        # Only request clients send PINGs    
         if requestCommand == 'PING':
-            if requestNodeId not in self.requestClients:
-                nodeId = self.add_node(address)
-                logging.info('Client %s joined', nodeId)
-            self.handle_response(f'{nodeId}:PONG'.encode(), address)
+            self.handle_ping(requestNodeId, address)
+
+        # Only worker nodes send JOINs
         elif requestCommand == 'JOIN':
-            if requestNodeId not in self.workerNodes:
-                nodeId = self.add_node(address)
-                logging.info('Node %s %s joined', nodeId, address)
-            self.handle_response(f'{nodeId}:ACK'.encode(), address)
-        else:
-            pass
+            self.handle_join(requestNodeId, address)
+
+        # Only request clients send JOBs
+        elif requestCommand == 'JOB':
+            self.handle_job(requestNodeId, address, payload)
+        
+        # Only worker nodes send statuses
+        elif requestCommand == 'IDLE' or requestCommand == 'BUSY':
+            return requestCommand
+        
+        # Only worker nodes send ACK_JOBs
+        elif requestCommand == 'ACK_JOB':
+            logging.info('Job accepted by %s %s', requestNodeId, self.workerNodes[requestNodeId])
+
+        elif requestCommand == 'RESULT':
+            logging.info('Job result: %s', payload)
+            self.result = payload
 
     # Send a response
     def handle_response(self, data, address):
         logging.info('Sending message: %s to %s', data.decode(), address)
         self.serverSocket.sendto(data, address)
 
-    # Run the server
+    # Handle PING requests
+    def handle_ping(self, requestNodeId, address):
+        # Check if a familiar client is pinging
+        if requestNodeId not in self.requestClients:
+            requestNodeId = random.randbytes(4).hex()
+            self.requestClients[requestNodeId] = address
+            logging.info('Client %s %s joined', requestNodeId, address)
+        if self.result:
+            self.handle_response(f'{requestNodeId}:RESULT:{self.result}'.encode(), address)
+            self.result = None
+        else:
+            # Send a response with the node ID and PONG 
+            self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
+
+    # Handle JOIN requests
+    def handle_join(self, requestNodeId, address):
+        if requestNodeId not in self.workerNodes:
+            requestNodeId = random.randbytes(4).hex()
+            self.workerNodes[requestNodeId] = address
+            logging.info('Node %s %s joined', requestNodeId, address)
+        # Send a response with the node ID and ACK
+        self.handle_response(f'{requestNodeId}:ACK:'.encode(), address)
+
+    # Handle JOB requests
+    def handle_job(self, requestNodeId, address, payload):
+        # Check if there are any available workers
+        if len(self.workerNodes) > 0:
+            # PING the worker nodes in order to find an available worker
+            for nodeId, nodeAddress in self.workerNodes.items():
+                self.handle_response(f'{nodeId}:PING:'.encode(), nodeAddress)
+                data, nodeAddress = self.serverSocket.recvfrom(1024)
+                if self.handle_request(data, nodeAddress) == 'IDLE':
+                    logging.info(f'Sending job to: {nodeId} {nodeAddress}')
+                    self.handle_response(f'{nodeId}:JOB:{payload}'.encode(), nodeAddress)
+                    data, nodeAddress = self.serverSocket.recvfrom(1024)
+                    self.handle_request(data, nodeAddress)
+                time.sleep(1)
+            self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
+        else:
+            logging.warning('No workers joined')
+            self.handle_response(f'{requestNodeId}:ERROR:No available workers'.encode(), address)
+
+# Run the server
     def run(self):
         logging.info('Server running')
         while True:

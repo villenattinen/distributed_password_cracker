@@ -2,6 +2,7 @@ import socket
 import subprocess
 import sys
 import threading
+import time
 
 class Worker:
     nodeId = 0
@@ -13,25 +14,31 @@ class Worker:
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        self.nodeId, response = data.decode().split(':')
+        print('Received:', data.decode(), 'from', address)
+        self.nodeId, response, payload = data.decode().split(':')
         if response == 'PING':
-            self.handle_response(f'{self.nodeId}:{self.status}'.encode(), address)
+            self.handle_response(f'{self.nodeId}:{self.status}:'.encode(), address)
         elif response == 'ACK':
             pass
         elif response == 'JOB':
-            # Thread to handle jobs
-            print('Starting job...')
-            self.handle_response(f'{self.nodeId}:ACK_JOB'.encode(), address)
+            print(f'Starting job: {payload}')
+            self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
+            self.handle_job(address, payload)
 
     # Send a response
     def handle_response(self, data, address):
         self.workerSocket.sendto(data, address)
+    
+    # Handle a job
+    def handle_job(self, address, payload):
+        time.sleep(20)
+        self.handle_response(f'{self.nodeId}:RESULT:{payload}'.encode(), address)
 
     # Run the server
     def run(self):
-        self.handle_response(f'{self.nodeId}:JOIN'.encode(), self.serverAddress)
+        self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
         while True:
-            print('Waiting for a job...')
+            print(f'Waiting for a job...{self.nodeId}')
             data, address = self.workerSocket.recvfrom(1024)
             self.handle_request(data, address)
 
