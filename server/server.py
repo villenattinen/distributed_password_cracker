@@ -1,10 +1,12 @@
 import logging
+import random
 import socket
 import sys
 import time
 
 class Server:
-    workerAddress = ('localhost', 8080)
+    workerNodes = {}
+    requestClients = {}
     commandResponsePairs = {
         'PING': 'PONG',
         'JOB': 'JOB',
@@ -17,17 +19,26 @@ class Server:
         self.serverAddress = (address, port)
         self.serverSocket.bind(self.serverAddress)
 
+    def add_node(self, address):
+        nodeId = random.randbytes(4).hex()
+        self.workerNodes[nodeId] = address
+        return nodeId
+
     # Handle incoming requests
     def handle_request(self, data, address):
         print('Received:', data.decode(), 'from', address)
         logging.info('Received: %s from %s', data.decode(), address)
-        if data.decode() == 'PING':
-            self.handle_response('PONG'.encode(), address)
-        elif data.decode() == 'JOB':
-            self.handle_response('JOB'.encode(), self.workerAddress)
-            self.handle_response('Job sent'.encode(), address)
-        elif data.decode() == 'ACK_JOB':
-            print('Job sent successfully')
+        requestNodeId, requestCommand = data.decode().split(':')        
+        if requestCommand == 'PING':
+            if requestNodeId not in self.requestClients:
+                nodeId = self.add_node(address)
+                logging.info('Client %s joined', nodeId)
+            self.handle_response(f'{nodeId}:PONG'.encode(), address)
+        elif requestCommand == 'JOIN':
+            if requestNodeId not in self.workerNodes:
+                nodeId = self.add_node(address)
+                logging.info('Node %s %s joined', nodeId, address)
+            self.handle_response(f'{nodeId}:ACK'.encode(), address)
         else:
             pass
 
@@ -54,5 +65,5 @@ if __name__ == '__main__':
     logging.info('Launching server...')
 
     # Start the server
-    server = Server(sys.argv[1], sys.argv[2]) # 'localhost', 9090
+    server = Server('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
     server.run()

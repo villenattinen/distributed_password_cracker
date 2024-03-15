@@ -4,38 +4,40 @@ import sys
 import threading
 
 class Worker:
+    nodeId = 0
+    status = 'IDLE'
     # Initialize the worker class
     def __init__(self, address, port):
-        self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.workerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.serverAddress = (address, port)
-        self.serverSocket.bind(self.serverAddress)
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        print('Received:', data.decode(), 'from', address)
-        if data.decode() == 'PING':
-            self.handle_response('PONG'.encode(), address)
-        elif data.decode() == 'JOB':
+        self.nodeId, response = data.decode().split(':')
+        if response == 'PING':
+            self.handle_response(f'{self.nodeId}:{self.status}'.encode(), address)
+        elif response == 'ACK':
+            pass
+        elif response == 'JOB':
             # Thread to handle jobs
             print('Starting job...')
-            self.handle_response('ACK_JOB'.encode(), address)
-        else:
-            pass
+            self.handle_response(f'{self.nodeId}:ACK_JOB'.encode(), address)
 
     # Send a response
     def handle_response(self, data, address):
-        self.serverSocket.sendto(data, address)
+        self.workerSocket.sendto(data, address)
 
     # Run the server
     def run(self):
+        self.handle_response(f'{self.nodeId}:JOIN'.encode(), self.serverAddress)
         while True:
             print('Waiting for a job...')
-            data, address = self.serverSocket.recvfrom(1024)
+            data, address = self.workerSocket.recvfrom(1024)
             self.handle_request(data, address)
 
 if __name__ == '__main__':
     # Start the worker
-    worker = Worker(sys.argv[1], sys.argv[2]) # 'localhost', 8080
+    worker = Worker('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
     # Thread to handle communication with the server
     #thread1 = threading.Thread(target=worker.run)
     worker.run()
