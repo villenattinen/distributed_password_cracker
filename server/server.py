@@ -47,6 +47,10 @@ class Server:
             logging.info('Job result: %s', payload)
             self.result = payload
 
+        elif requestCommand == 'FAIL':
+            logging.info(f'Job result: {requestCommand}')
+            self.result = requestCommand
+
     # Send a response
     def handle_response(self, data, address):
         logging.info('Sending message: %s to %s', data.decode(), address)
@@ -60,7 +64,14 @@ class Server:
             self.requestClients[requestNodeId] = address
             logging.info('Client %s %s joined', requestNodeId, address)
         if self.result:
-            self.handle_response(f'{requestNodeId}:RESULT:{self.result}'.encode(), address)
+            if self.result == 'FAIL':
+                self.handle_response(f'{requestNodeId}:FAIL:'.encode(), address)
+            else:
+                self.handle_response(f'{requestNodeId}:RESULT:{self.result}'.encode(), address)
+            
+            # Remove client from dict once job is finished
+            del self.requestClients[requestNodeId]
+            # Reset result
             self.result = None
         else:
             # Send a response with the node ID and PONG 

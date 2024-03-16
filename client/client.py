@@ -47,12 +47,15 @@ if __name__ == '__main__':
         time.sleep(5)
     print('Job accepted by server')
 
-    print('PINGing server')
+    print('PINGing server until JOB is finished')
     while True:
         client.send(f'{client.clientId}:PING:')
         serverStatus, payload = client.receive()
-        if serverStatus != 'PONG':
+        if serverStatus == 'RESULT':
             print(f'Cracked: {payload}')
+            break
+        elif serverStatus == 'FAIL':
+            print('Failed to crack hash')
             break
         print('Server working, retrying in 5 seconds')
         time.sleep(5)

@@ -1,3 +1,4 @@
+import random
 import socket
 import subprocess
 import sys
@@ -32,7 +33,11 @@ class Worker:
     # Handle a job
     def handle_job(self, address, payload):
         time.sleep(20)
-        self.handle_response(f'{self.nodeId}:RESULT:{payload}'.encode(), address)
+        tempFailOrResult = random.randint(0,1)
+        if tempFailOrResult == 1:
+            self.handle_response(f'{self.nodeId}:RESULT:{payload}'.encode(), address)
+        else:
+            self.handle_response(f'{self.nodeId}:FAIL:'.encode(), address)
 
     # Run the server
     def run(self):
