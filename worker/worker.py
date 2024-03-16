@@ -17,13 +17,18 @@ class Worker:
     def handle_request(self, data, address):
         print('Received:', data.decode(), 'from', address)
         self.nodeId, response, payload = data.decode().split(':')
+        # Server sends PING request to get worker's status
         if response == 'PING':
             self.handle_response(f'{self.nodeId}:{self.status}:'.encode(), address)
+        # Server sends ACKs to acknowledge results
         elif response == 'ACK':
             pass
+        # Server sends JOBs to crack hashes
         elif response == 'JOB':
             print(f'Starting job: {payload}')
+            # Send response to acknowledge the received JOB
             self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
+            # Start working
             self.handle_job(address, payload)
 
     # Send a response
@@ -32,10 +37,14 @@ class Worker:
     
     # Handle a job
     def handle_job(self, address, payload):
+        # TEMPORARY IMPLEMENTATION only to simulate the time taken to work
+        # Randomly send a FAIL or a RESULT
         time.sleep(20)
         tempFailOrResult = random.randint(0,1)
+        # Successful crack
         if tempFailOrResult == 1:
             self.handle_response(f'{self.nodeId}:RESULT:{payload}'.encode(), address)
+        # Failed to crack
         else:
             self.handle_response(f'{self.nodeId}:FAIL:'.encode(), address)
 

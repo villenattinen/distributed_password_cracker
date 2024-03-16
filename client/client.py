@@ -15,7 +15,7 @@ class Client:
     
     # Receive a message
     def receive(self):
-        data, server = self.clientSocket.recvfrom(1024)
+        data, address = self.clientSocket.recvfrom(1024)
         self.clientId, response, payload = data.decode().split(':')
         return response, payload
 
@@ -30,8 +30,11 @@ if __name__ == '__main__':
 
     print('PINGing server')
     while True:
-        client.send(f'{client.clientId}:PING:')
-        serverStatus = client.receive()[0]
+        try:
+            client.send(f'{client.clientId}:PING:')
+            serverStatus = client.receive()[0]
+        except Exception as e:
+            pass
         if serverStatus == 'PONG':
             break
         print('Server unavailable, retrying in 5 seconds')
@@ -50,11 +53,11 @@ if __name__ == '__main__':
     print('PINGing server until JOB is finished')
     while True:
         client.send(f'{client.clientId}:PING:')
-        serverStatus, payload = client.receive()
-        if serverStatus == 'RESULT':
+        jobStatus, payload = client.receive()
+        if jobStatus == 'RESULT':
             print(f'Cracked: {payload}')
             break
-        elif serverStatus == 'FAIL':
+        elif jobStatus == 'FAIL':
             print('Failed to crack hash')
             break
         print('Server working, retrying in 5 seconds')
