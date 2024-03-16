@@ -38,21 +38,23 @@ class Worker:
     # Handle a job
     def handle_job(self, address, payload):
         # TEMPORARY IMPLEMENTATION only to simulate the time taken to work
+        jobId, hashToCrack = payload.split('=')
         # Randomly send a FAIL or a RESULT
         time.sleep(20)
         tempFailOrResult = random.randint(0,1)
         # Successful crack
         if tempFailOrResult == 1:
-            self.handle_response(f'{self.nodeId}:RESULT:{payload}'.encode(), address)
+            crackedHash = 'salasana'
+            self.handle_response(f'{self.nodeId}:RESULT:{jobId}={crackedHash}'.encode(), address)
         # Failed to crack
         else:
-            self.handle_response(f'{self.nodeId}:FAIL:'.encode(), address)
+            self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
 
     # Run the server
     def run(self):
         self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
         while True:
-            print(f'Waiting for a job...{self.nodeId}')
+            print(f'Waiting for a job...')
             data, address = self.workerSocket.recvfrom(1024)
             self.handle_request(data, address)
 
