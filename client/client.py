@@ -56,28 +56,34 @@ if __name__ == '__main__':
     serverStatus = 'UNKNOWN'
 
     print('Checking if server is up')
-    # Try to establish connection with the server
-    while True:
+    # Try to establish connection with the server five times
+    for i in range(5):
         try:
             client.send(f'{client.clientId}:PING:')
             serverStatus = client.receive()[0]
             if serverStatus == 'PONG':
                 break
         except Exception as e:
+            if i > 4:
+                print('Server unavailable, terminating client')
+                sys.exit(1)
             print('Server unavailable, retrying in 5 seconds')
             time.sleep(5)
 
     print('Server is up!')
 
-    # Send a job to the server
+    # Try to send a job to the server five times
     print('Checking if server is accepting jobs')
-    while True:
+    for i in range(5):
         try:
             client.send(f'{client.clientId}:JOB:{client.hashToCrack};{client.passwordLength}')
             if client.receive()[0] == 'ACK_JOB':
                 break
             print('Server not accepting jobs, retrying in 5 seconds')
         except Exception as e:
+            if i > 4:
+                print('Server unavailable, terminating client')
+                sys.exit(1)
             print('Server not responding, retrying in 5 seconds')
         time.sleep(5)
     

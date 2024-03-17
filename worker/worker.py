@@ -120,8 +120,8 @@ class Worker:
     def run(self):
         logging.info(f'Trying to establish connection with server at {self.serverAddress}')
 
-        # Send a JOIN request to the server every 5 seconds until the server acknowledges it
-        while True:
+        # Try to join the server every 5 seconds for five times
+        for i in range(5):
             try:
                 self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
                 data, address = self.workerSocket.recvfrom(1024)
@@ -129,7 +129,11 @@ class Worker:
                 if data.decode().split(':')[1] == 'ACK':
                     break
             except Exception as e:
-                logging.warning(f'Failed to connect to server at {self.serverAddress}, retrying in 5 seconds')
+                if i > 4:
+                    print('Server unavailable, terminating client')
+                    sys.exit(1)
+                print('Server unavailable, retrying in 5 seconds')
+                logging.warning(f'Failed to connect to server at {self.serverAddress}: {e}')
             time.sleep(5)
 
         logging.info(f':Node[{self.nodeId}]: Connected to server at {self.serverAddress}')
