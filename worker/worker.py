@@ -50,6 +50,10 @@ class Worker:
         else:
             self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
 
+    def handle_abort(self):
+        print('Aborting job')
+        # TODO: kill thread working on job
+
     # Run the server
     def run(self):
         self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)

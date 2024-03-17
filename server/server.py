@@ -45,19 +45,22 @@ class Server:
             logging.info('Job accepted by %s %s', requestNodeId, self.workerNodes[requestNodeId])
 
         # Worker has cracked the hash
-        # TODO: Send shutdown commands to other still active workers
         elif requestCommand == 'RESULT':
             jobId, result = payload.split('=')
             logging.info('Job result: %s', payload)
             self.activeWorkers[requestNodeId] = requestCommand
             self.jobs[jobId] = result
 
+            # TODO: Send abort commands to other still active workers
+            # Clear the list of active workers
+            self.activeWorkers.clear()
+
         # Worker has failed to crack the hash
         elif requestCommand == 'FAIL':
-            logging.info(f'Job result: {requestCommand}')
-            self.activeWorkers[requestNodeId] = requestCommand
-            # If all workers have finished and no result is found update job status to FAIL
-            if None not in self.activeWorkers.values():
+            logging.info(f'Job result: {requestCommand} from {requestNodeId} {self.workerNodes[requestNodeId]}')
+            del self.activeWorkers[requestNodeId]
+            # If all workers for that job have finished and no result is found update job status to FAIL
+            if payload not in self.activeWorkers.values():
                 self.jobs[payload] = requestCommand
 
     # Send a response
@@ -90,14 +93,11 @@ class Server:
 
                 # Remove client from dict once job is finished
                 del self.requestClients[requestNodeId]
+                # Remove job from dict once job is finished
                 del self.jobs[requestNodeId]
-
-                # Clear the list of active workers
-                # TODO: PING workers and shut them down if they are not IDLE
-                self.activeWorkers.clear()
             else:
                 # Send a response with the node ID and PING
-                self.handle_response(f'{requestNodeId}:PING:'.encode(), address)
+                self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
         # No result/no job active, send PONG to acknowledge
         else:
             # Send a response with the node ID and PONG 
@@ -131,8 +131,8 @@ class Server:
                 data, nodeAddress = self.serverSocket.recvfrom(1024)
                 # Check if worker is available (IDLE or BUSY)
                 if self.handle_request(data, nodeAddress) == 'IDLE':
-                    # Add worker to dict of available workers, set result as None initially
-                    self.activeWorkers[nodeId] = None
+                    # Add worker to dict of available workers, set value as Job ID
+                    self.activeWorkers[nodeId] = requestNodeId
                 # Wait before sending next request
                 time.sleep(1)
             # Inform the client that the job was received
@@ -141,7 +141,7 @@ class Server:
             # Send the job to the available workers
             # TODO: Implement splitting the job to multiple workers
             for workerNodeId in self.activeWorkers:
-                self.send_jobs(requestNodeId, workerNodeId, self.workerNodes[workerNodeId], payload)
+                self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], payload)
 
         # No workers have joined
         else:
@@ -149,16 +149,22 @@ class Server:
             logging.warning('No workers joined')
             self.handle_response(f'{requestNodeId}:ERROR:No available workers'.encode(), address)
 
-    def send_jobs(self, jobId, nodeId, nodeAddress, hashToCrack):
+    def send_jobs(self, nodeId, nodeAddress, hashToCrack):
         # Send the job to the worker
         logging.info(f'Sending job to: {nodeId} {nodeAddress}')
-        self.handle_response(f'{nodeId}:JOB:{jobId}={hashToCrack}'.encode(), nodeAddress)
+        self.handle_response(f'{nodeId}:JOB:{self.activeWorkers[nodeId]}={hashToCrack}'.encode(), nodeAddress)
         # Receive acknowledgment for the job
         data, nodeAddress = self.serverSocket.recvfrom(1024)
         # Handle request
         self.handle_request(data, nodeAddress)
 
-# Run the server
+    def handle_abort(self):
+        logging.info('Aborting all active workers')
+        # Send ABORT commands to all active workers
+        for nodeId, nodeAddress in self.activeWorkers.items():
+            self.handle_response(f'{nodeId}:ABORT:'.encode(), nodeAddress)
+
+    # Run the server
     def run(self):
         logging.info('Server running')
         while True:
