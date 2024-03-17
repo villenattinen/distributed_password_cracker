@@ -115,7 +115,7 @@ class Server:
             if self.jobs[requestNodeId]:
                 # Time taken to crack the hash
                 timeTaken = time.time() - self.jobStartTimes[requestNodeId]
-                logging.info(f'Job {requestNodeId} finished in {timeTaken} seconds')
+                logging.info(f'Job {requestNodeId} finished in {timeTaken:.2f} seconds')
 
                 # Failed to crack hash
                 if self.jobs[requestNodeId] == 'FAIL':

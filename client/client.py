@@ -76,10 +76,9 @@ if __name__ == '__main__':
             client.send(f'{client.clientId}:JOB:{client.hashToCrack};{client.passwordLength}')
             if client.receive()[0] == 'ACK_JOB':
                 break
+            print('Server not accepting jobs, retrying in 5 seconds')
         except Exception as e:
             print('Server not responding, retrying in 5 seconds')
-            time.sleep(5)
-        print('Server not accepting jobs, retrying in 5 seconds')
         time.sleep(5)
     
     print('Job accepted by server')
@@ -96,10 +95,9 @@ if __name__ == '__main__':
                 print(f'\nFailed to crack hash {client.hashToCrack}')
                 break
             print('Server working, retrying in 5 seconds')
-            time.sleep(5)
         except Exception as e:
             print('Server not responding, retrying in 5 seconds')
-            time.sleep(5)
+        time.sleep(5)
 
     print('\nAll done!')
 
