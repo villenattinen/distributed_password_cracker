@@ -11,6 +11,8 @@ class Server:
     requestClients = {}
     # Dict of received jobs (job ID: result)
     jobs = {}
+    # Dict of available workers (node ID: job ID)
+    availableWorkers = {}
     # Dict of active workers (node ID: job ID)
     activeWorkers = {}
 
@@ -24,27 +26,29 @@ class Server:
     def handle_request(self, data, address):
         print(f'Received: {data.decode()} from {address}')
         logging.info(f'Received: {data.decode()} from {address}')
+
+        # Data consists of nodeId:command:payload
         requestNodeId, requestCommand, payload = data.decode().split(':')
 
         # Check the request type
 
-        # Only request clients send PINGs    
+        # Request client has sent a PING to know the status of server or job 
         if requestCommand == 'PING':
             self.handle_ping(requestNodeId, address)
 
-        # Only workers send JOINs
+        # Worker client has asked to join
         elif requestCommand == 'JOIN':
             self.handle_join(requestNodeId, address)
 
-        # Only request clients send JOBs
+        # Request client has sent a job
         elif requestCommand == 'JOB':
             self.handle_job(requestNodeId, address, payload)
         
-        # Only workers send statuses
+        # Worker responds to PING with its status (IDLE or BUSY)
         elif requestCommand == 'IDLE' or requestCommand == 'BUSY':
             return requestCommand
         
-        # Only workers send ACK_JOBs
+        # Worker has acknowledged the job
         elif requestCommand == 'ACK_JOB':
             logging.info(f'Job accepted by {requestNodeId} {self.workerNodes[requestNodeId]}')
 
@@ -88,7 +92,7 @@ class Server:
         # Default payload is empty
         payload = ''
 
-        # Check if client pinging is in dict
+        # Check if client pinging is in dict (client has joined before)
         if requestNodeId not in self.requestClients:
             # Generate new ID for client
             requestNodeId = random.randbytes(4).hex()
@@ -97,7 +101,7 @@ class Server:
             logging.info(f'New client {requestNodeId} {address} joined')
 
         # Check if the client ID matches a job ID 
-        if requestNodeId in self.jobs:
+        elif requestNodeId in self.jobs:
             # Check if a result is available
             if self.jobs[requestNodeId]:
                 # Failed to crack hash
@@ -140,28 +144,31 @@ class Server:
 
             # Find available workers
             for nodeId, nodeAddress in self.workerNodes.items():
-                # PING the worker node to get its status
-                self.handle_response(f'{nodeId}:PING:'.encode(), nodeAddress)
-                # Receive response
                 try:
+                    # PING the worker node to get its status
+                    self.handle_response(f'{nodeId}:PING:'.encode(), nodeAddress)
+                    # Receive response
                     data, nodeAddress = self.serverSocket.recvfrom(1024)
+                    # Check if worker is available (IDLE or BUSY)
+                    if self.handle_request(data, nodeAddress) == 'IDLE':
+                        # Add worker to dict of available workers, set value as Job ID
+                        self.availableWorkers[nodeId] = requestNodeId
                 except Exception as e:
                     logging.warning(f'Worker {nodeId} {nodeAddress} not responding')
-                    logging.info(f'Removing worker {nodeId} {nodeAddress} from list of available workers')
+                    logging.info(f'Removing worker {nodeId} {nodeAddress} from list of known workers')
                     del self.workerNodes[nodeId]
                     continue
-                # Check if worker is available (IDLE or BUSY)
-                if self.handle_request(data, nodeAddress) == 'IDLE':
-                    # Add worker to dict of available workers, set value as Job ID
-                    self.activeWorkers[nodeId] = requestNodeId
-                # Wait before sending next request
-                time.sleep(1)
+            
+            # Check if any workers are currently available
+            if len(self.availableWorkers) == 0:
+                logging.warning('All workers are busy')
+
             # Inform the client that the job was received
             self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
 
             # Send the job to the available workers
             # TODO: Implement splitting the job to multiple workers
-            for workerNodeId in self.activeWorkers:
+            for workerNodeId in self.availableWorkers:
                 self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], payload)
 
         # No workers have joined
@@ -170,6 +177,11 @@ class Server:
             logging.warning('No workers joined')
             self.handle_response(f'{requestNodeId}:ERROR:No available workers'.encode(), address)
 
+    # Split the job to multiple workers
+    def split_job(self):
+        pass
+    
+    # Send the job to the worker
     def send_jobs(self, nodeId, nodeAddress, hashToCrack):
         # Send the job to the worker
         logging.info(f'Sending job to: {nodeId} {nodeAddress}')
@@ -179,6 +191,7 @@ class Server:
         # Handle request
         self.handle_request(data, nodeAddress)
 
+    # Abort all active workers
     def handle_abort(self):
         logging.info('Aborting all active workers')
         # Send ABORT commands to all active workers
