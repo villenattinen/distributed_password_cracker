@@ -29,7 +29,7 @@ class Worker:
     # Handle incoming requests
     def handle_request(self, data, address):
         print(f'Received: {data.decode()} from {address}')
-        logging.info(f'Received: {data.decode()} from {address}')
+        logging.info(f':Node[{self.nodeId}]: Received: {data.decode()} from {address}')
         # Data consists of nodeId:response:payload
         self.nodeId, response, payload = data.decode().split(':')
 
@@ -53,7 +53,7 @@ class Worker:
     # Send a response
     def handle_response(self, data, address):
         print(f'Sending: {data.decode()} to {address}')
-        logging.info(f'Sending: {data.decode()} to {address}')
+        logging.info(f':Node[{self.nodeId}]: Sending: {data.decode()} to {address}')
         self.workerSocket.sendto(data, address)
     
     # Handle a job
@@ -65,7 +65,7 @@ class Worker:
         jobId, hashToCrack, lowerLimit, upperLimit, passwordLength = payload.split(';')
         print(f'Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
         print(f'Starting job with ID {jobId} and hash {hashToCrack}')
-        logging.info(f'Starting job with ID {jobId} and hash {hashToCrack}')
+        logging.info(f':Node[{self.nodeId}]: Starting job with ID {jobId} and hash {hashToCrack}')
 
         # hashcat -m 0 -a 3 hash ?d*length --skip lower --limit upper
         """
@@ -79,15 +79,15 @@ class Worker:
             if self.shouldAbort.is_set():
                 return
             tempFailOrResult = random.randint(0,10)
-
+     
         # Successful crack
         if tempFailOrResult == 1:
             crackedHash = 'salasana'
-            logging.info(f'Job {jobId} finished with result: {crackedHash}')
+            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {crackedHash}')
             self.handle_response(f'{self.nodeId}:RESULT:{jobId};{crackedHash}'.encode(), address)
         # Failed to crack
         else:
-            logging.info(f'Job {jobId} failed')
+            logging.info(f':Node[{self.nodeId}]: Job {jobId} failed')
             self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
         # Reset status
         self.status = 'IDLE'
@@ -95,7 +95,7 @@ class Worker:
     # Handle an abort by closing the job thread
     def handle_abort(self):
         print('Aborting job')
-        logging.info('Aborting job')
+        logging.info(f':Node[{self.nodeId}]: Aborting job')
         # Set event to terminate job thread
         self.shouldAbort.set()
         # Wait for job thread to terminate
@@ -114,13 +114,14 @@ class Worker:
             try:
                 self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
                 data, address = self.workerSocket.recvfrom(1024)
+                self.handle_request(data, address)
                 if data.decode().split(':')[1] == 'ACK':
                     break
             except Exception as e:
                 logging.warning(f'Failed to connect to server at {self.serverAddress}, retrying in 5 seconds')
-                time.sleep(5)
+            time.sleep(5)
 
-        logging.info(f'Connected to server at {self.serverAddress}')
+        logging.info(f':Node[{self.nodeId}]: Connected to server at {self.serverAddress}')
         # Listen for incoming requests
         while True:
             data, address = self.workerSocket.recvfrom(1024)
