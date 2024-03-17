@@ -4,7 +4,9 @@ import sys
 import time
 
 class Client:
+    # Initialize client's ID as 0, server will assign a unique ID
     clientId = 0
+
     # Initialize the client class
     def __init__(self, address, port):
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -43,39 +45,51 @@ if __name__ == '__main__':
     hashToCrack = 'asdf'
 
     print('Checking if server is up')
+    # Try to establish connection with the server
     while True:
         try:
             client.send(f'{client.clientId}:PING:')
             serverStatus = client.receive()[0]
+            if serverStatus == 'PONG':
+                break
         except Exception as e:
-            pass
-        if serverStatus == 'PONG':
-            break
-        print('Server unavailable, retrying in 5 seconds')
-        time.sleep(5)
+            print('Server unavailable, retrying in 5 seconds')
+            time.sleep(5)
+
     print('Server is up!')
 
+    # Send a job to the server
     print('Checking if server is accepting jobs')
     while True:
-        client.send(f'{client.clientId}:JOB:{hashToCrack}')
-        if client.receive()[0] == 'ACK_JOB':
-            break
+        try:
+            client.send(f'{client.clientId}:JOB:{hashToCrack}')
+            if client.receive()[0] == 'ACK_JOB':
+                break
+        except Exception as e:
+            print('Server not responding, retrying in 5 seconds')
+            time.sleep(5)
         print('Server not accepting jobs, retrying in 5 seconds')
         time.sleep(5)
+    
     print('Job accepted by server')
 
     print('Checking if job is finished')
     while True:
-        client.send(f'{client.clientId}:PING:')
-        jobStatus, payload = client.receive()
-        if jobStatus == 'RESULT':
-            print(f'\nHash {hashToCrack} successfully cracked\nResult: {payload}\n')
-            break
-        elif jobStatus == 'FAIL':
-            print(f'\nFailed to crack hash {hashToCrack}')
-            break
-        print('Server working, retrying in 5 seconds')
-        time.sleep(5)
+        try:
+            client.send(f'{client.clientId}:PING:')
+            jobStatus, payload = client.receive()
+            if jobStatus == 'RESULT':
+                print(f'\nHash {hashToCrack} successfully cracked\nResult: {payload}\n')
+                break
+            elif jobStatus == 'FAIL':
+                print(f'\nFailed to crack hash {hashToCrack}')
+                break
+            print('Server working, retrying in 5 seconds')
+            time.sleep(5)
+        except Exception as e:
+            print('Server not responding, retrying in 5 seconds')
+            time.sleep(5)
+
     print('\nAll done!')
 
     client.close()
