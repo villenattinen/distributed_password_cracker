@@ -11,6 +11,8 @@ class Server:
     requestClients = {}
     # Dict of received jobs (job ID: result)
     jobs = {}
+    # Dict of job start times
+    jobStartTimes = {}
     # Dict of available workers (node ID: job ID)
     availableWorkers = {}
     # Dict of active workers (node ID: job ID)
@@ -111,6 +113,10 @@ class Server:
         elif requestNodeId in self.jobs:
             # Check if a result is available
             if self.jobs[requestNodeId]:
+                # Time taken to crack the hash
+                timeTaken = time.time() - self.jobStartTimes[requestNodeId]
+                logging.info(f'Job {requestNodeId} finished in {timeTaken} seconds')
+
                 # Failed to crack hash
                 if self.jobs[requestNodeId] == 'FAIL':
                     # Set result as FAIL
@@ -143,6 +149,9 @@ class Server:
 
     # Handle JOB requests
     def handle_job(self, requestNodeId, address, payload):
+        # Start tracking the time
+        self.jobStartTimes[requestNodeId] = time.time()
+
         # Check if any workers have joined
         if len(self.workerNodes) > 0:
             # Add job to dict, use the client's ID as job ID
