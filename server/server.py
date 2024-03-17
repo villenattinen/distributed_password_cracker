@@ -153,7 +153,7 @@ class Server:
         self.jobStartTimes[requestNodeId] = time.time()
 
         # Check if any workers have joined
-        if len(self.workerNodes) > 0:
+        if len(self.workerNodes) > 4:
             # Add job to dict, use the client's ID as job ID
             self.jobs[requestNodeId] = None
             logging.info(f'New job added to queue: {requestNodeId}, {payload}')
@@ -175,30 +175,36 @@ class Server:
                     del self.workerNodes[nodeId]
                     continue
             
-            # Check if any workers are currently available
-            if len(self.availableWorkers) == 0:
-                logging.info('All workers busy')
+            # Check if enough workers are currently available
+            if len(self.availableWorkers) > 4:
+                # Inform the client that the job was accepted
+                self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
 
-            # Inform the client that the job was received
-            self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
+                # Incoming JOB payload is in the form of clientId:JOB:hashToCrack;passwordLength
+                hashToCrack, passwordLength = payload.split(';')
 
-            # Incoming JOB payload is in the form of clientId:JOB:hashToCrack;passwordLength
-            hashToCrack, passwordLength = payload.split(';')
+                # Split the job to five parts
+                limits = self.split_jobs(passwordLength)
+                print(limits)
 
-            # Split the job to five parts
-            limits = self.split_jobs(passwordLength)
-            print(limits)
+                # Send the job to the available workers
+                i = 0
+                for workerNodeId in self.availableWorkers:
+                    # Make sure we only send the job to five workers
+                    if i > 4:
+                        break
+                    self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], hashToCrack, limits[i][0], limits[i][1], passwordLength)
+                    # Add worker to list of active workers with job ID as value
+                    self.activeWorkers[workerNodeId] = requestNodeId
+                    i += 1
 
-            # Send the job to the available workers
-            i = 0
-            for workerNodeId in self.availableWorkers:
-                # Make sure we only send the job to five workers
-                if i > 4:
-                    break
-                self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], hashToCrack, limits[i][0], limits[i][1], passwordLength)
-                # Add worker to list of active workers with job ID as value
-                self.activeWorkers[workerNodeId] = requestNodeId
-                i += 1
+                # Clear the list of available workers
+                self.availableWorkers.clear()
+
+            # Not enough workers are currently available
+            else:
+                logging.info('Too many workers busy')
+                self.handle_response(f'{requestNodeId}:ERROR:Not enough available workers'.encode(), address)
 
         # No workers have joined
         else:
