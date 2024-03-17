@@ -6,6 +6,11 @@ import sys
 import threading
 import time
 
+"""
+Worker class
+
+"""
+
 class Worker:
     # Intialize ID as 0, server will assign a unique ID
     nodeId = 0
@@ -34,8 +39,7 @@ class Worker:
 
         # Server sends ACKs to acknowledge results
         elif response == 'ACK':
-            # TODO: Implement ACK handling
-            pass
+            return True
 
         # Server sends JOBs to crack hashes
         elif response == 'JOB':
@@ -107,7 +111,20 @@ class Worker:
     # Run the worker
     def run(self):
         logging.info(f'Worker running at {self.serverAddress}')
-        self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
+        logging.info(f'Trying to establish connection with server at {self.serverAddress}')
+
+        # Send a JOIN request to the server every 5 seconds until the server acknowledges it
+        while True:
+            try:
+                self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
+                data, address = self.workerSocket.recvfrom(1024)
+                if self.handle_request(data, address):
+                    break
+            except Exception as e:
+                logging.warning(f'Failed to connect to server at {self.serverAddress}, retrying in 5 seconds')
+                time.sleep(5)
+
+        logging.info(f'Connected to server at {self.serverAddress}')
         # Listen for incoming requests
         while True:
             data, address = self.workerSocket.recvfrom(1024)
