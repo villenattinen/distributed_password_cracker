@@ -61,8 +61,8 @@ class Worker:
         # Set worker's status to BUSY
         self.status = 'BUSY'
 
-        # Job status
-        cracked = False
+        # Job status/cracked password
+        cracked = None
 
         # Variable to simulate cracking
         randomInteger = random.randint(0, 10)
@@ -74,22 +74,32 @@ class Worker:
 
         # Simulate the job
         while randomInteger != 0 and randomInteger != 1:
-            # Check if the job has been aborted
+            # Check if the job has been aborted, stop running if it has
             if self.shouldAbort.is_set():
                 break
-            randomInteger = random.randint(0, 10)
-            time.sleep(randomInteger)
+            randomInteger = random.randint(0, 30)
+            time.sleep(randomInteger // 5)
 
-        # Successful crack
-        if cracked:
-            result = 'RESULT'
-            payload = f'{jobId};{cracked}'
-            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {cracked}')
-        # Failed to crack
-        else:
-            result = 'FAIL'
+        if randomInteger == 1:
+            cracked = 'Psw123'
+
+        # Job aborted
+        if self.shouldAbort.is_set():
+            print(f'[WORKER]: Job {jobId} aborted')
+            logging.info(f':Node[{self.nodeId}]: Job {jobId} aborted')
+            result = 'ABORT'
             payload = jobId
-            logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
+        else:
+            # Successful crack
+            if cracked:
+                result = 'RESULT'
+                payload = f'{jobId};{cracked}'
+                logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {cracked}')
+            # Failed to crack
+            else:
+                result = 'FAIL'
+                payload = jobId
+                logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
 
         # Reset status of worker
         self.status = 'IDLE'
@@ -105,8 +115,6 @@ class Worker:
         self.jobThread.join()
         # Clear the event
         self.shouldAbort.clear()
-        # Reset status
-        self.status = 'IDLE'
 
     # Run the worker
     def run(self):

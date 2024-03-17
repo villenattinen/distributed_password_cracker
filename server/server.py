@@ -88,6 +88,13 @@ class Server:
             if payload not in self.activeWorkers.values():
                 self.jobs[payload] = requestCommand
 
+        # Worker has aborted the job
+        elif requestCommand == 'ABORT':
+            logging.info(f'Job {payload} aborted by {requestNodeId} {self.workerNodes[requestNodeId]}')
+            # Remove worker from list of active workers
+            if requestNodeId in self.activeWorkers:
+                del self.activeWorkers[requestNodeId]
+
     # Send a response
     def handle_response(self, data, address):
         logging.info(f'Sending: {data.decode()} to {address}')
