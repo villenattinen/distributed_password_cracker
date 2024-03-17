@@ -36,11 +36,13 @@ if __name__ == '__main__':
     )
 
     # Start the client
+    print('Starting client')
     logging.info('Starting client')
     client = Client('localhost', 9090) #sys.argv[1], sys.argv[2], sys.argv[3]) #
     serverStatus = 'UNKNOWN'
+    hashToCrack = 'asdf'
 
-    print('PINGing server')
+    print('Checking if server is up')
     while True:
         try:
             client.send(f'{client.clientId}:PING:')
@@ -53,27 +55,27 @@ if __name__ == '__main__':
         time.sleep(5)
     print('Server is up!')
 
-    print('Sending job')
+    print('Checking if server is accepting jobs')
     while True:
-        client.send(f'{client.clientId}:JOB:asdf')
+        client.send(f'{client.clientId}:JOB:{hashToCrack}')
         if client.receive()[0] == 'ACK_JOB':
             break
         print('Server not accepting jobs, retrying in 5 seconds')
         time.sleep(5)
     print('Job accepted by server')
 
-    print('PINGing server until JOB is finished')
+    print('Checking if job is finished')
     while True:
         client.send(f'{client.clientId}:PING:')
         jobStatus, payload = client.receive()
         if jobStatus == 'RESULT':
-            print(f'Cracked: {payload}')
+            print(f'\nHash {hashToCrack} successfully cracked\nResult: {payload}\n')
             break
         elif jobStatus == 'FAIL':
-            print('Failed to crack hash')
+            print(f'\nFailed to crack hash {hashToCrack}')
             break
         print('Server working, retrying in 5 seconds')
         time.sleep(5)
-    print('All done!')
+    print('\nAll done!')
 
     client.close()
