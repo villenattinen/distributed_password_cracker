@@ -5,7 +5,7 @@ Course Project for the course Distributed Systems (521290S)
 Author: Ville Nättinen
 
 ## Main idea
-The project consists of a request client, a server, and worker clients. The request client is intended to send a hash to the server, which will then distribute the hash to the worker clients. The worker clients will then try to crack the hash and send the result back to the server. The server will then send the result back to the request client.  
+The project consists of a request client, a server, and worker clients. The request client is intended to send a hash to the server, which will then distribute the hash to multiple worker clients. The worker clients will then try to crack the hash and send the result back to the server, working in parallel to speed up the process. The server will then send the result back to the request client.  
 
 The worker clients don't actually crack hashes, only simulate a password cracker by "working" from random, but short, times.  
 
@@ -44,3 +44,6 @@ The request client's parameters don't actually matter, but they would have been 
 | | ABORT (end the job of the still running worker) -> | |
 | PING -> | | |
 | | <- RESULT | |
+
+## Where is Hashcat/John the Ripper/your favourite cracker?
+The original idea was to have the worker clients actually crack passwords with well established applications. However, due to time constraints, the worker clients only simulate the cracking process. The remnants of integrating Hashcat into the project can be found in the `hashcat` branch.  
