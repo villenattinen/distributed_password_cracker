@@ -153,7 +153,7 @@ class Server:
         self.jobStartTimes[requestNodeId] = time.time()
 
         # Check if enough workers have joined
-        if len(self.workerNodes) > 1:
+        if len(self.workerNodes) > 4:
             # Add job to dict, use the client's ID as job ID
             self.jobs[requestNodeId] = None
             logging.info(f'New job added to queue: {requestNodeId}, {payload}')
@@ -176,22 +176,21 @@ class Server:
                     continue
             
             # Check if enough workers are currently available
-            if len(self.availableWorkers) > 1 and len(self.activeWorkers) == 0:
+            if len(self.availableWorkers) > 4:
                 # Inform the client that the job was accepted
                 self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
 
                 # Incoming JOB payload is in the form of clientId:JOB:hashToCrack;passwordLength
                 hashToCrack, passwordLength = payload.split(';')
 
-                # Split the job to two parts
-                halfwayMark = self.keyspaces[passwordLength] // 2
-                limits = [(0, halfwayMark), (halfwayMark + 1, self.keyspaces[passwordLength])]
+                # Split the job to five parts
+                limits = self.split_jobs(passwordLength)
 
-                # Send the job to the first two available workers
+                # Send the job to the first five available workers
                 i = 0
                 for workerNodeId in self.availableWorkers:
-                    # Make sure we only send the job to two workers
-                    if i > 1:
+                    # Make sure we only send the job to five workers
+                    if i > 4:
                         break
                     self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], hashToCrack, limits[i][0], limits[i][1], passwordLength)
                     # Add worker to list of active workers with job ID as value
@@ -223,6 +222,24 @@ class Server:
         data, nodeAddress = self.serverSocket.recvfrom(1024)
         # Handle request
         self.handle_request(data, nodeAddress)
+
+    # Split a job to five parts
+    def split_jobs(self, passwordLength):
+        # Divide the keyspace into 5 parts
+        iterationsPerWorker = self.keyspaces[passwordLength] // 5
+        # List of lower and upper limits of iterations
+        limits = []
+        # Initialize the upper limit of iterations as -1 for first loop
+        upperLimit = -1
+        # Loop from 1 to 5
+        for i in range(1,6):
+            # Calculate the lower and upper limits of iterations
+            # For example, if the password length is 3, the ranges will be:
+            # 0...1805, 1806...3610, 3611..5415, 5416...7220, 7221...9025
+            lowerLimit = upperLimit + 1
+            upperLimit = i * iterationsPerWorker
+            limits.append((lowerLimit, upperLimit))
+        return limits
 
     # Abort all active workers
     def handle_abort(self):
