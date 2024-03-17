@@ -23,14 +23,18 @@ class Worker:
 
     # Handle incoming requests
     def handle_request(self, data, address):
+        print(f'Received: {data.decode()} from {address}')
         logging.info(f'Received: {data.decode()} from {address}')
+        # Data consists of nodeId:response:payload
         self.nodeId, response, payload = data.decode().split(':')
+
         # Server sends PING request to get worker's status
         if response == 'PING':
             self.handle_response(f'{self.nodeId}:{self.status}:'.encode(), address)
 
         # Server sends ACKs to acknowledge results
         elif response == 'ACK':
+            # TODO: Implement ACK handling
             pass
 
         # Server sends JOBs to crack hashes
@@ -38,7 +42,7 @@ class Worker:
             print(f'Starting job: {payload}')
             # Send response to acknowledge the received JOB
             self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
-            # Start working
+            # Start job in a new thread to keep listening for other requests
             self.jobThread = threading.Thread(target=self.handle_job, args=(address, payload))
             self.jobThread.start()
         
@@ -48,21 +52,23 @@ class Worker:
 
     # Send a response
     def handle_response(self, data, address):
+        print(f'Sending: {data.decode()} to {address}')
         logging.info(f'Sending: {data.decode()} to {address}')
         self.workerSocket.sendto(data, address)
     
     # Handle a job
     def handle_job(self, address, payload):
-        # Set status to BUSY
+        # Set worker's status to BUSY
         self.status = 'BUSY'
 
         # Extract the job ID and hash from the payload
         jobId, hashToCrack = payload.split('=')
 
+        print(f'Starting job with ID {jobId} and hash {hashToCrack}')
         logging.info(f'Starting job with ID {jobId} and hash {hashToCrack}')
 
         """
-        TEMPORARY IMPLEMENTATION only to simulate the time taken to work
+        TEMPORARY IMPLEMENTATION only to simulate a job taking time to complete
         """
         # Randomly sleep between 5 and 20 seconds
         tempRandomSleepTime = random.randint(5,20)
@@ -87,6 +93,7 @@ class Worker:
 
     # Handle an abort by closing the job thread
     def handle_abort(self):
+        print('Aborting job')
         logging.info('Aborting job')
         # Set event to terminate job thread
         self.shouldAbort.set()
@@ -97,7 +104,7 @@ class Worker:
         # Reset status
         self.status = 'IDLE'
 
-    # Run the server
+    # Run the worker
     def run(self):
         self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
         while True:
@@ -112,6 +119,7 @@ if __name__ == '__main__':
         level=logging.INFO,
         format='%(asctime)s:%(levelname)s:%(message)s'
     )
+
     # Start the worker
     logging.info('Starting worker')
     worker = Worker('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
