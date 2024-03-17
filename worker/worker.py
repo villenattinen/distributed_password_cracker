@@ -61,6 +61,9 @@ class Worker:
         # Set worker's status to BUSY
         self.status = 'BUSY'
 
+        # Job status
+        cracked = False
+
         # Extract the job ID and hash from the payload
         jobId, hashToCrack, lowerLimit, upperLimit, passwordLength = payload.split(';')
         print(f'Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
@@ -68,27 +71,27 @@ class Worker:
         logging.info(f':Node[{self.nodeId}]: Starting job with ID {jobId} and hash {hashToCrack}')
 
         # hashcat -m 0 -a 3 hash ?d*length --skip lower --limit upper
+        hashcatCommand = f'hashcat -m 0 -a 3 {hashToCrack} ?a*{passwordLength} --skip {lowerLimit} --limit {upperLimit}'
+
+        # Execute hashcat command using subprocess
+        try:
+            output = subprocess.check_output(hashcatCommand, shell=True)
+            print(output.decode("utf-8"))
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing hashcat command: {e}")
+            logging.error(f':Node[{self.nodeId}]: Error executing hashcat command: {e}')
         """
-        TEMPORARY IMPLEMENTATION only to simulate a job taking time to complete
-        """
-        # Randomly sleep between 5 and 20 seconds
-        tempRandomSleepTime = random.randint(5,20)
-        tempFailOrResult = random.randint(0,10)
-        time.sleep(tempRandomSleepTime)
-        while tempFailOrResult != 1 and tempFailOrResult != 0:
-            if self.shouldAbort.is_set():
-                return
-            tempFailOrResult = random.randint(0,10)
-     
         # Successful crack
         if tempFailOrResult == 1:
             crackedHash = 'salasana'
             logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {crackedHash}')
             self.handle_response(f'{self.nodeId}:RESULT:{jobId};{crackedHash}'.encode(), address)
+        """
         # Failed to crack
-        else:
-            logging.info(f':Node[{self.nodeId}]: Job {jobId} failed')
+        if not cracked:
+            logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
             self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
+
         # Reset status
         self.status = 'IDLE'
 
