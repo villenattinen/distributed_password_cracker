@@ -28,7 +28,7 @@ class Worker:
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        print(f'Received: {data.decode()} from {address}')
+        print(f'[WORKER]: Received: {data.decode()} from {address}')
         logging.info(f':Node[{self.nodeId}]: Received: {data.decode()} from {address}')
         # Data consists of nodeId:response:payload
         self.nodeId, response, payload = data.decode().split(':')
@@ -39,7 +39,7 @@ class Worker:
 
         # Server sends JOBs to crack hashes
         elif response == 'JOB':
-            print(f'Starting job: {payload}')
+            print(f'[WORKER]: Starting job: {payload}')
             # Send response to acknowledge the received JOB
             self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
             # Start job in a new thread to keep listening for other requests
@@ -52,7 +52,7 @@ class Worker:
 
     # Send a response
     def handle_response(self, data, address):
-        print(f'Sending: {data.decode()} to {address}')
+        print(f'[WORKER]: Sending: {data.decode()} to {address}')
         logging.info(f':Node[{self.nodeId}]: Sending: {data.decode()} to {address}')
         self.workerSocket.sendto(data, address)
     
@@ -66,8 +66,7 @@ class Worker:
 
         # Extract the job ID and hash from the payload
         jobId, hashToCrack, lowerLimit, upperLimit, passwordLength = payload.split(';')
-        print(f'Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
-        print(f'Starting job with ID {jobId} and hash {hashToCrack}')
+        print(f'[WORKER]: Starting Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
         logging.info(f':Node[{self.nodeId}]: Starting job with ID {jobId} and hash {hashToCrack}')
 
         # hashcat -m 0 -a 3 hash ?d*length --skip lower --limit upper
@@ -76,9 +75,9 @@ class Worker:
         # Execute hashcat command using subprocess
         try:
             output = subprocess.check_output(hashcatCommand, shell=True)
-            print(output.decode("utf-8"))
+            print(F'[WORKER]: {output.decode("utf-8")}')
         except subprocess.CalledProcessError as e:
-            print(f"Error executing hashcat command: {e}")
+            print(f"[WORKER]: Error executing hashcat command: {e}")
             logging.error(f':Node[{self.nodeId}]: Error executing hashcat command: {e}')
         """
         # Successful crack
@@ -97,7 +96,7 @@ class Worker:
 
     # Handle an abort by closing the job thread
     def handle_abort(self):
-        print('Aborting job')
+        print('[WORKER]: Aborting job')
         logging.info(f':Node[{self.nodeId}]: Aborting job')
         # Set event to terminate job thread
         self.shouldAbort.set()
@@ -140,11 +139,12 @@ if __name__ == '__main__':
 
     # Start the worker
     logging.info('Starting worker')
+    print('[WORKER]: Starting worker')
     try:
         worker = Worker(sys.argv[1], int(sys.argv[2])) # 'localhost', 9090) #
     except Exception as e:
         logging.error(f'Failed to launch worker: {e}')
-        print(f'Failed to launch worker: {e}')
-        print('Usage: worker.py <server_address> <server_port>')
+        print(f'[WORKER]: Failed to launch worker: {e}')
+        print('[WORKER]: Usage: worker.py <server_address> <server_port>')
         sys.exit(1)
     worker.run()

@@ -33,7 +33,7 @@ class Server:
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        print(f'Received: {data.decode()} from {address}')
+        print(f'[SERVER]: Received: {data.decode()} from {address}')
         logging.info(f'Received: {data.decode()} from {address}')
 
         # Data consists of nodeId:command:payload
@@ -91,7 +91,7 @@ class Server:
     # Send a response
     def handle_response(self, data, address):
         logging.info(f'Sending: {data.decode()} to {address}')
-        print(f'Sending: {data.decode()} to {address}')
+        print(f'[SERVER]: Sending: {data.decode()} to {address}')
         self.serverSocket.sendto(data, address)
 
     # Handle PING requests
@@ -252,6 +252,7 @@ class Server:
     # Run the server
     def run(self):
         logging.info(f'Server running at {self.serverAddress}')
+        print(f'[SERVER]: Server running at {self.serverAddress}')
         # Listen for incoming requests
         while True:
             data, address = self.serverSocket.recvfrom(1024)
@@ -265,12 +266,12 @@ if __name__ == '__main__':
         format='%(asctime)s:%(levelname)s:%(message)s'
     )
     logging.info('Launching server...')
-
+    print('[SERVER]: Launching server...')
     # Start the server
     try:
         server = Server('localhost', 9090) #sys.argv[1], sys.argv[2]) #
         server.run()
     except Exception as e:
         logging.error(f'Failed to launch server: {e}')
-        print(f'Failed to launch server: {e}')
+        print(f'[SERVER]: Failed to launch server: {e}')
         sys.exit(1)
