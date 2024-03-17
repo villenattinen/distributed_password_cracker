@@ -5,9 +5,13 @@ import sys
 import time
 
 class Server:
+    # Dict of worker clients (node ID: address)
     workerNodes = {}
+    # Dict of request clients (node ID: address)
     requestClients = {}
+    # Dict of received jobs (job ID: result)
     jobs = {}
+    # Dict of active workers (node ID: job ID)
     activeWorkers = {}
 
     # Initialize the server class
@@ -18,8 +22,8 @@ class Server:
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        print('Received:', data.decode(), 'from', address)
-        logging.info('Received: %s from %s', data.decode(), address)
+        print(f'Received: {data.decode()} from {address}')
+        logging.info(f'Received: {data.decode()} from {address}')
         requestNodeId, requestCommand, payload = data.decode().split(':')
 
         # Check the request type
@@ -42,12 +46,12 @@ class Server:
         
         # Only workers send ACK_JOBs
         elif requestCommand == 'ACK_JOB':
-            logging.info('Job accepted by %s %s', requestNodeId, self.workerNodes[requestNodeId])
+            logging.info(f'Job accepted by {requestNodeId} {self.workerNodes[requestNodeId]}')
 
         # Worker has cracked the hash
         elif requestCommand == 'RESULT':
             jobId, result = payload.split('=')
-            logging.info('Job result: %s', payload)
+            logging.info(f'Job result: {payload} from {requestNodeId} {self.workerNodes[requestNodeId]}')
             self.jobs[jobId] = result
 
             # Remove worker from list of active workers
@@ -56,6 +60,7 @@ class Server:
             # Send abort commands to other still active workers
             self.handle_abort()
             # Clear the list of active workers
+            # TODO: make sure workers ACK the abort command
             self.activeWorkers.clear()
 
         # Worker has failed to crack the hash
@@ -72,19 +77,24 @@ class Server:
 
     # Send a response
     def handle_response(self, data, address):
-        logging.info('Sending message: %s to %s', data.decode(), address)
-        print('Sending:', data.decode(), 'to', address)
+        logging.info(f'Sending: {data.decode()} to {address}')
+        print(f'Sending: {data.decode()} to {address}')
         self.serverSocket.sendto(data, address)
 
     # Handle PING requests
     def handle_ping(self, requestNodeId, address):
+        # Default response is PONG
+        responseCommand = 'PONG'
+        # Default payload is empty
+        payload = ''
+
         # Check if client pinging is in dict
         if requestNodeId not in self.requestClients:
             # Generate new ID for client
             requestNodeId = random.randbytes(4).hex()
             # Add client to dict
             self.requestClients[requestNodeId] = address
-            logging.info('Client %s %s joined', requestNodeId, address)
+            logging.info(f'New client {requestNodeId} {address} joined')
 
         # Check if the client ID matches a job ID 
         if requestNodeId in self.jobs:
@@ -92,26 +102,21 @@ class Server:
             if self.jobs[requestNodeId]:
                 # Failed to crack hash
                 if self.jobs[requestNodeId] == 'FAIL':
-                    # Send result to client
-                    self.handle_response(f'{requestNodeId}:FAIL:'.encode(), address)
+                    # Set result as FAIL
+                    responseCommand = 'FAIL'
                 # Succeeded in cracking hash
                 else:
-                    # Send result to client
-                    self.handle_response(f'{requestNodeId}:RESULT:{self.jobs[requestNodeId]}'.encode(), address)
+                    # Set result and the payload as the cracked hash
+                    responseCommand = 'RESULT'
+                    payload = self.jobs[requestNodeId]
 
                 # Remove client from dict once job is finished
                 del self.requestClients[requestNodeId]
                 # Remove job from dict once job is finished
                 del self.jobs[requestNodeId]
-
-            # A mathcing job ID found but job is not finished
-            else:
-                # Send a response with the node ID and PONG 
-                self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
-        # No job active, send PONG to acknowledge
-        else:
-            # Send a response with the node ID and PONG 
-            self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
+        
+        # Send a response with the node ID, response command and possible payload
+        self.handle_response(f'{requestNodeId}:{responseCommand}:{payload}'.encode(), address)
 
     # Handle JOIN requests
     def handle_join(self, requestNodeId, address):
@@ -121,7 +126,7 @@ class Server:
             requestNodeId = random.randbytes(4).hex()
             # Add worker to dict
             self.workerNodes[requestNodeId] = address
-            logging.info('Node %s %s joined', requestNodeId, address)
+            logging.info(f'Node {requestNodeId} {address} joined')
         # Send a response with the node ID and ACK
         self.handle_response(f'{requestNodeId}:ACK:'.encode(), address)
 
@@ -131,7 +136,7 @@ class Server:
         if len(self.workerNodes) > 0:
             # Add job to dict, use the client's ID as job ID
             self.jobs[requestNodeId] = None
-            logging.info('New job added to queue: %s %s', requestNodeId, payload)
+            logging.info(f'New job added to queue: {requestNodeId}, {payload}')
 
             # Find available workers
             for nodeId, nodeAddress in self.workerNodes.items():
@@ -141,8 +146,8 @@ class Server:
                 try:
                     data, nodeAddress = self.serverSocket.recvfrom(1024)
                 except Exception as e:
-                    logging.warning('Worker %s %s not responding', nodeId, nodeAddress)
-                    logging.info('Removing worker %s %s from list of available workers', nodeId, nodeAddress)
+                    logging.warning(f'Worker {nodeId} {nodeAddress} not responding')
+                    logging.info(f'Removing worker {nodeId} {nodeAddress} from list of available workers')
                     del self.workerNodes[nodeId]
                     continue
                 # Check if worker is available (IDLE or BUSY)
