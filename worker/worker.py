@@ -40,6 +40,8 @@ class Worker:
         # Server sends JOBs to crack hashes
         elif response == 'JOB':
             print(f'[WORKER]: Starting job: {payload}')
+            # Set worker's status to BUSY
+            self.status = 'BUSY'
             # Send response to acknowledge the received JOB
             self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
             # Start job in a new thread to keep listening for other requests
@@ -58,8 +60,6 @@ class Worker:
     
     # Handle a job
     def handle_job(self, address, payload):
-        # Set worker's status to BUSY
-        self.status = 'BUSY'
 
         # Job status/cracked password
         cracked = None
@@ -77,7 +77,7 @@ class Worker:
             # Check if the job has been aborted, stop running if it has
             if self.shouldAbort.is_set():
                 break
-            randomInteger = random.randint(0, 30)
+            randomInteger = random.randint(0, 50)
             time.sleep(randomInteger // 5)
 
         if randomInteger == 1:
