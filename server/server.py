@@ -250,5 +250,5 @@ if __name__ == '__main__':
     logging.info('Launching server...')
 
     # Start the server
-    server = Server('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
+    server = Server('localhost', 9090) #sys.argv[1], sys.argv[2]) #
     server.run()

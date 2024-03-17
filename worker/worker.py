@@ -37,10 +37,6 @@ class Worker:
         if response == 'PING':
             self.handle_response(f'{self.nodeId}:{self.status}:'.encode(), address)
 
-        # Server sends ACKs to acknowledge results
-        elif response == 'ACK':
-            return True
-
         # Server sends JOBs to crack hashes
         elif response == 'JOB':
             print(f'Starting job: {payload}')
@@ -111,7 +107,6 @@ class Worker:
 
     # Run the worker
     def run(self):
-        logging.info(f'Worker running at {self.serverAddress}')
         logging.info(f'Trying to establish connection with server at {self.serverAddress}')
 
         # Send a JOIN request to the server every 5 seconds until the server acknowledges it
@@ -119,7 +114,7 @@ class Worker:
             try:
                 self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
                 data, address = self.workerSocket.recvfrom(1024)
-                if self.handle_request(data, address):
+                if data.decode().split(':')[1] == 'ACK':
                     break
             except Exception as e:
                 logging.warning(f'Failed to connect to server at {self.serverAddress}, retrying in 5 seconds')
@@ -141,5 +136,11 @@ if __name__ == '__main__':
 
     # Start the worker
     logging.info('Starting worker')
-    worker = Worker('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
+    try:
+        worker = Worker(sys.argv[1], int(sys.argv[2])) # 'localhost', 9090) #
+    except Exception as e:
+        logging.error(f'Failed to launch worker: {e}')
+        print(f'Failed to launch worker: {e}')
+        print('Usage: worker.py <server_address> <server_port>')
+        sys.exit(1)
     worker.run()

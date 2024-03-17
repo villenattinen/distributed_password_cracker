@@ -6,11 +6,15 @@ import time
 class Client:
     # Initialize client's ID as 0, server will assign a unique ID
     clientId = 0
+    hashToCrack = ''
+    passwordLength = 0
 
     # Initialize the client class
-    def __init__(self, address, port):
+    def __init__(self, address, port, hashToCrack, passwordLength):
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.serverAddress = (address, port)
+        self.hashToCrack = hashToCrack
+        self.passwordLength = passwordLength
 
     # Send a message
     def send(self, message):
@@ -40,10 +44,16 @@ if __name__ == '__main__':
     # Start the client
     print('Starting client')
     logging.info('Starting client')
-    client = Client('localhost', 9090) #sys.argv[1], sys.argv[2], sys.argv[3]) #
+    try:
+        client = Client(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4]) #'localhost', 9090) #
+    except Exception as e:
+        logging.error(f'Failed to launch client: {e}')
+        print(f'Failed to launch client: {e}')
+        print('Usage: client.py <server_address> <server_port> <hash_to_crack> <password_length>')
+        sys.exit(1)
+    
+    # Set server status to UNKNOWN at the start
     serverStatus = 'UNKNOWN'
-    hashToCrack = 'asdf'
-    passwordLength = 4
 
     print('Checking if server is up')
     # Try to establish connection with the server
@@ -63,7 +73,7 @@ if __name__ == '__main__':
     print('Checking if server is accepting jobs')
     while True:
         try:
-            client.send(f'{client.clientId}:JOB:{hashToCrack};{passwordLength}')
+            client.send(f'{client.clientId}:JOB:{client.hashToCrack};{client.passwordLength}')
             if client.receive()[0] == 'ACK_JOB':
                 break
         except Exception as e:
@@ -80,10 +90,10 @@ if __name__ == '__main__':
             client.send(f'{client.clientId}:PING:')
             jobStatus, payload = client.receive()
             if jobStatus == 'RESULT':
-                print(f'\nHash {hashToCrack} successfully cracked\nResult: {payload}\n')
+                print(f'\nHash {client.hashToCrack} successfully cracked\nResult: {payload}\n')
                 break
             elif jobStatus == 'FAIL':
-                print(f'\nFailed to crack hash {hashToCrack}')
+                print(f'\nFailed to crack hash {client.hashToCrack}')
                 break
             print('Server working, retrying in 5 seconds')
             time.sleep(5)
