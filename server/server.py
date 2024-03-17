@@ -196,6 +196,8 @@ class Server:
                 if i > 4:
                     break
                 self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], hashToCrack, limits[i][0], limits[i][1], passwordLength)
+                # Add worker to list of active workers with job ID as value
+                self.activeWorkers[workerNodeId] = requestNodeId
                 i += 1
 
         # No workers have joined
