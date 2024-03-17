@@ -80,11 +80,10 @@ class Worker:
                 # Kill the hashcat process if it's running
                 if self.shouldAbort.is_set():
                     hashcatProcess.kill()
-                output = hashcatProcess.stdout.readline()
-                print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
                 if hashcatProcess.poll():
+                    output = hashcatProcess.stdout.readline()
+                    print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
                     break
-            print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
         except subprocess.CalledProcessError as e:
             print(f"[WORKER]: Error executing hashcat command: {e}")
             logging.error(f':Node[{self.nodeId}]: Error executing hashcat command: {e}')
