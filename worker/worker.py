@@ -1,3 +1,4 @@
+import logging
 import random
 import socket
 import subprocess
@@ -22,7 +23,7 @@ class Worker:
 
     # Handle incoming requests
     def handle_request(self, data, address):
-        print('Received:', data.decode(), 'from', address)
+        logging.info(f'Received: {data.decode()} from {address}')
         self.nodeId, response, payload = data.decode().split(':')
         # Server sends PING request to get worker's status
         if response == 'PING':
@@ -47,6 +48,7 @@ class Worker:
 
     # Send a response
     def handle_response(self, data, address):
+        logging.info(f'Sending: {data.decode()} to {address}')
         self.workerSocket.sendto(data, address)
     
     # Handle a job
@@ -56,6 +58,8 @@ class Worker:
 
         # Extract the job ID and hash from the payload
         jobId, hashToCrack = payload.split('=')
+
+        logging.info(f'Starting job with ID {jobId} and hash {hashToCrack}')
 
         """
         TEMPORARY IMPLEMENTATION only to simulate the time taken to work
@@ -72,16 +76,18 @@ class Worker:
         # Successful crack
         if tempFailOrResult == 1:
             crackedHash = 'salasana'
+            logging.info(f'Job {jobId} finished with result: {crackedHash}')
             self.handle_response(f'{self.nodeId}:RESULT:{jobId}={crackedHash}'.encode(), address)
         # Failed to crack
         else:
+            logging.info(f'Job {jobId} failed')
             self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
         # Reset status
         self.status = 'IDLE'
 
     # Handle an abort by closing the job thread
     def handle_abort(self):
-        print('Aborting job')
+        logging.info('Aborting job')
         # Set event to terminate job thread
         self.shouldAbort.set()
         # Wait for job thread to terminate
@@ -100,6 +106,13 @@ class Worker:
             self.handle_request(data, address)
 
 if __name__ == '__main__':
+    # Set up logging
+    logging.basicConfig(
+        filename='worker.log',
+        level=logging.INFO,
+        format='%(asctime)s:%(levelname)s:%(message)s'
+    )
     # Start the worker
+    logging.info('Starting worker')
     worker = Worker('localhost', 9090) #sys.argv[1], sys.argv[2]) # 
     worker.run()

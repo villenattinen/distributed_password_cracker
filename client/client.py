@@ -1,3 +1,4 @@
+import logging
 import socket
 import sys
 import time
@@ -11,20 +12,31 @@ class Client:
 
     # Send a message
     def send(self, message):
+        logging.info(f'Sending: {message} to {self.serverAddress}')
         self.clientSocket.sendto(message.encode(), self.serverAddress)
     
     # Receive a message
     def receive(self):
         data, address = self.clientSocket.recvfrom(1024)
+        logging.info(f'Received: {data.decode()} from {address}')
         self.clientId, response, payload = data.decode().split(':')
         return response, payload
 
     # Close the connection
     def close(self):
+        logging.info('Closing connection')
         self.clientSocket.close()
 
 if __name__ == '__main__':
+    # Set up logging
+    logging.basicConfig(
+        filename='client.log',
+        level=logging.INFO,
+        format='%(asctime)s:%(levelname)s:%(message)s'
+    )
+
     # Start the client
+    logging.info('Starting client')
     client = Client('localhost', 9090) #sys.argv[1], sys.argv[2], sys.argv[3]) #
     serverStatus = 'UNKNOWN'
 
