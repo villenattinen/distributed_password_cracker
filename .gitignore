@@ -1,0 +1,4 @@
+# Ignore log files
+client.log
+server.log
+worker.log
