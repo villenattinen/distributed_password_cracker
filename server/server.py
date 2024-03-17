@@ -48,17 +48,24 @@ class Server:
         elif requestCommand == 'RESULT':
             jobId, result = payload.split('=')
             logging.info('Job result: %s', payload)
-            self.activeWorkers[requestNodeId] = requestCommand
             self.jobs[jobId] = result
 
-            # TODO: Send abort commands to other still active workers
+            # Remove worker from list of active workers
+            if requestNodeId in self.activeWorkers:
+                del self.activeWorkers[requestNodeId]
+            # Send abort commands to other still active workers
+            self.handle_abort()
             # Clear the list of active workers
             self.activeWorkers.clear()
 
         # Worker has failed to crack the hash
         elif requestCommand == 'FAIL':
             logging.info(f'Job result: {requestCommand} from {requestNodeId} {self.workerNodes[requestNodeId]}')
-            del self.activeWorkers[requestNodeId]
+
+            # Make sure the worker is still in the list of active workers
+            if requestNodeId in self.activeWorkers:
+                # Remove worker from list of active workers
+                del self.activeWorkers[requestNodeId]
             # If all workers for that job have finished and no result is found update job status to FAIL
             if payload not in self.activeWorkers.values():
                 self.jobs[payload] = requestCommand
@@ -66,6 +73,7 @@ class Server:
     # Send a response
     def handle_response(self, data, address):
         logging.info('Sending message: %s to %s', data.decode(), address)
+        print('Sending:', data.decode(), 'to', address)
         self.serverSocket.sendto(data, address)
 
     # Handle PING requests
@@ -78,9 +86,9 @@ class Server:
             self.requestClients[requestNodeId] = address
             logging.info('Client %s %s joined', requestNodeId, address)
 
-        # Check if any JOBs exist
-        if len(self.jobs) > 0:
-            # Check if a job is finished
+        # Check if the client ID matches a job ID 
+        if requestNodeId in self.jobs:
+            # Check if a result is available
             if self.jobs[requestNodeId]:
                 # Failed to crack hash
                 if self.jobs[requestNodeId] == 'FAIL':
@@ -95,10 +103,12 @@ class Server:
                 del self.requestClients[requestNodeId]
                 # Remove job from dict once job is finished
                 del self.jobs[requestNodeId]
+
+            # A mathcing job ID found but job is not finished
             else:
-                # Send a response with the node ID and PING
+                # Send a response with the node ID and PONG 
                 self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
-        # No result/no job active, send PONG to acknowledge
+        # No job active, send PONG to acknowledge
         else:
             # Send a response with the node ID and PONG 
             self.handle_response(f'{requestNodeId}:PONG:'.encode(), address)
@@ -128,7 +138,13 @@ class Server:
                 # PING the worker node to get its status
                 self.handle_response(f'{nodeId}:PING:'.encode(), nodeAddress)
                 # Receive response
-                data, nodeAddress = self.serverSocket.recvfrom(1024)
+                try:
+                    data, nodeAddress = self.serverSocket.recvfrom(1024)
+                except Exception as e:
+                    logging.warning('Worker %s %s not responding', nodeId, nodeAddress)
+                    logging.info('Removing worker %s %s from list of available workers', nodeId, nodeAddress)
+                    del self.workerNodes[nodeId]
+                    continue
                 # Check if worker is available (IDLE or BUSY)
                 if self.handle_request(data, nodeAddress) == 'IDLE':
                     # Add worker to dict of available workers, set value as Job ID
@@ -161,8 +177,8 @@ class Server:
     def handle_abort(self):
         logging.info('Aborting all active workers')
         # Send ABORT commands to all active workers
-        for nodeId, nodeAddress in self.activeWorkers.items():
-            self.handle_response(f'{nodeId}:ABORT:'.encode(), nodeAddress)
+        for nodeId, _ in self.activeWorkers.items():
+            self.handle_response(f'{nodeId}:ABORT:'.encode(), self.workerNodes[nodeId])
 
     # Run the server
     def run(self):
