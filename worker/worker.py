@@ -69,30 +69,44 @@ class Worker:
         print(f'[WORKER]: Starting Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
         logging.info(f':Node[{self.nodeId}]: Starting job with ID {jobId} and hash {hashToCrack}')
 
-        # hashcat -m 0 -a 3 hash ?d*length --skip lower --limit upper
-        hashcatCommand = f'hashcat -m 0 -a 3 {hashToCrack} ?a*{passwordLength} --skip {lowerLimit} --limit {upperLimit}'
-
+        # hashcat -m 0 -a 3 hash ?a*length --skip lower --limit upper
+        characterSet = '?a' * int(passwordLength)
+        hashcatCommand = f'hashcat -m 0 -a 3 {hashToCrack} {characterSet} --skip {lowerLimit} --limit {upperLimit} --potfile-disable --quiet --outfile-format=2 --session={self.nodeId}'
+        print(f'[WORKER]: Executing: {hashcatCommand}')
         # Execute hashcat command using subprocess
         try:
-            output = subprocess.check_output(hashcatCommand, shell=True)
-            print(F'[WORKER]: {output.decode("utf-8")}')
+            hashcatProcess = subprocess.Popen(hashcatCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            while True:
+                # Kill the hashcat process if it's running
+                if self.shouldAbort.is_set():
+                    hashcatProcess.kill()
+                output = hashcatProcess.stdout.readline()
+                print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
+                if hashcatProcess.poll():
+                    break
+            print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
         except subprocess.CalledProcessError as e:
             print(f"[WORKER]: Error executing hashcat command: {e}")
             logging.error(f':Node[{self.nodeId}]: Error executing hashcat command: {e}')
-        """
-        # Successful crack
-        if tempFailOrResult == 1:
-            crackedHash = 'salasana'
-            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {crackedHash}')
-            self.handle_response(f'{self.nodeId}:RESULT:{jobId};{crackedHash}'.encode(), address)
-        """
-        # Failed to crack
-        if not cracked:
-            logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
-            self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
 
-        # Reset status
+        crackedHash = output.decode('utf-8').strip()
+
+        # Successful crack
+        if crackedHash:
+            result = 'RESULT'
+            payload = f'{jobId};{crackedHash}'
+            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {crackedHash}')
+
+        # Failed to crack
+        if not crackedHash:
+            result = 'FAIL'
+            payload = jobId
+            logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
+
+        # Reset status of worker and process
+        self.hashcatProcess = None
         self.status = 'IDLE'
+        self.handle_response(f'{self.nodeId}:{result}:{payload}'.encode(), address)
 
     # Handle an abort by closing the job thread
     def handle_abort(self):

@@ -185,7 +185,6 @@ class Server:
 
                 # Split the job to five parts
                 limits = self.split_jobs(passwordLength)
-                print(limits)
 
                 # Send the job to the available workers
                 i = 0

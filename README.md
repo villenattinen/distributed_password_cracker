@@ -1,7 +1,7 @@
 # distributed_password_cracker
 Distributed Password Cracker
 
-(Unfortunately) This project is built to be run in a Windows environment and assumes that Hashcat is already installed.
+(Unfortunately) This project is built to be run in a Windows environment and assumes that Hashcat binaries are extracted into the same folder. Running this on a Linux based system should work assuming that Hashcat is already installed.
 
 Example of a run:
 | Client | Server | Workers |
