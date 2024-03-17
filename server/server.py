@@ -251,7 +251,7 @@ if __name__ == '__main__':
     print('[SERVER]: Launching server...')
     # Start the server
     try:
-        server = Server('localhost', 9090) #sys.argv[1], sys.argv[2]) #
+        server = Server('localhost', 9090)
         server.run()
     except Exception as e:
         logging.error(f'Failed to launch server: {e}')

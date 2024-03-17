@@ -64,46 +64,34 @@ class Worker:
         # Job status
         cracked = False
 
+        # Variable to simulate cracking
+        randomInteger = random.randint(0, 10)
+
         # Extract the job ID and hash from the payload
         jobId, hashToCrack, lowerLimit, upperLimit, passwordLength = payload.split(';')
         print(f'[WORKER]: Starting Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
         logging.info(f':Node[{self.nodeId}]: Starting job with ID {jobId} and hash {hashToCrack}')
 
-        # hashcat -m 0 -a 3 hash ?a*length --skip lower --limit upper
-        characterSet = '?a' * int(passwordLength)
-        hashcatCommand = f'hashcat -m 0 -a 3 {hashToCrack} {characterSet} --skip {lowerLimit} --limit {upperLimit} --potfile-disable --quiet --outfile-format=2 --session={self.nodeId}'
-        print(f'[WORKER]: Executing: {hashcatCommand}')
-        # Execute hashcat command using subprocess
-        try:
-            hashcatProcess = subprocess.Popen(hashcatCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            while True:
-                # Kill the hashcat process if it's running
-                if self.shouldAbort.is_set():
-                    hashcatProcess.kill()
-                if hashcatProcess.poll():
-                    output = hashcatProcess.stdout.readline()
-                    print(F'[WORKER]: Hashcat output: {output.decode("utf-8")}')
-                    break
-        except subprocess.CalledProcessError as e:
-            print(f"[WORKER]: Error executing hashcat command: {e}")
-            logging.error(f':Node[{self.nodeId}]: Error executing hashcat command: {e}')
-
-        crackedHash = output.decode('utf-8').strip()
+        # Simulate the job
+        while randomInteger != 0 and randomInteger != 1:
+            # Check if the job has been aborted
+            if self.shouldAbort.is_set():
+                break
+            randomInteger = random.randint(0, 10)
+            time.sleep(randomInteger)
 
         # Successful crack
-        if crackedHash:
+        if cracked:
             result = 'RESULT'
-            payload = f'{jobId};{crackedHash}'
-            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {crackedHash}')
-
+            payload = f'{jobId};{cracked}'
+            logging.info(f':Node{self.nodeId} Job {jobId} finished with result: {cracked}')
         # Failed to crack
-        if not crackedHash:
+        else:
             result = 'FAIL'
             payload = jobId
             logging.info(f':Node[{self.nodeId}]: Job {jobId} unsuccessful')
 
-        # Reset status of worker and process
-        self.hashcatProcess = None
+        # Reset status of worker
         self.status = 'IDLE'
         self.handle_response(f'{self.nodeId}:{result}:{payload}'.encode(), address)
 
