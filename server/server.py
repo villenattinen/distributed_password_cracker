@@ -168,7 +168,7 @@ class Server:
     def run(self):
         logging.info('Server running')
         while True:
-            print('Waiting for a message...')
+            print('Listening...')
             data, address = self.serverSocket.recvfrom(1024)
             self.handle_request(data, address)
 

@@ -8,6 +8,7 @@ import time
 class Worker:
     nodeId = 0
     status = 'IDLE'
+    jobThread = None
     # Initialize the worker class
     def __init__(self, address, port):
         self.workerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -29,7 +30,8 @@ class Worker:
             # Send response to acknowledge the received JOB
             self.handle_response(f'{self.nodeId}:ACK_JOB:'.encode(), address)
             # Start working
-            self.handle_job(address, payload)
+            self.jobThread = threading.Thread(target=self.handle_job, args=(address, payload))
+            self.jobThread.start()
 
     # Send a response
     def handle_response(self, data, address):
@@ -37,6 +39,7 @@ class Worker:
     
     # Handle a job
     def handle_job(self, address, payload):
+        self.status = 'BUSY'
         # TEMPORARY IMPLEMENTATION only to simulate the time taken to work
         jobId, hashToCrack = payload.split('=')
         # Randomly send a FAIL or a RESULT
@@ -49,16 +52,19 @@ class Worker:
         # Failed to crack
         else:
             self.handle_response(f'{self.nodeId}:FAIL:{jobId}'.encode(), address)
+        # Reset status
+        self.status = 'IDLE'
 
     def handle_abort(self):
         print('Aborting job')
-        # TODO: kill thread working on job
+        # Kill thread working on job
+        self.jobThread.join()
 
     # Run the server
     def run(self):
         self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
         while True:
-            print(f'Waiting for a job...')
+            print(f'Listening...')
             data, address = self.workerSocket.recvfrom(1024)
             self.handle_request(data, address)
 
