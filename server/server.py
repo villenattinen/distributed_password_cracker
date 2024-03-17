@@ -187,9 +187,9 @@ class Server:
 
     # Run the server
     def run(self):
-        logging.info('Server running')
+        logging.info(f'Server running at {self.serverAddress}')
+        # Listen for incoming requests
         while True:
-            print('Listening...')
             data, address = self.serverSocket.recvfrom(1024)
             self.handle_request(data, address)
 

@@ -106,9 +106,10 @@ class Worker:
 
     # Run the worker
     def run(self):
+        logging.info(f'Worker running at {self.serverAddress}')
         self.handle_response(f'{self.nodeId}:JOIN:'.encode(), self.serverAddress)
+        # Listen for incoming requests
         while True:
-            print(f'Listening...')
             data, address = self.workerSocket.recvfrom(1024)
             self.handle_request(data, address)
 
