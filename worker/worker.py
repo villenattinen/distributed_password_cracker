@@ -66,11 +66,12 @@ class Worker:
         self.status = 'BUSY'
 
         # Extract the job ID and hash from the payload
-        jobId, hashToCrack = payload.split('=')
-
+        jobId, hashToCrack, lowerLimit, upperLimit, passwordLength = payload.split(';')
+        print(f'Job ID: {jobId}, Hash: {hashToCrack}, Lower: {lowerLimit}, Upper: {upperLimit}, Length: {passwordLength}')
         print(f'Starting job with ID {jobId} and hash {hashToCrack}')
         logging.info(f'Starting job with ID {jobId} and hash {hashToCrack}')
 
+        # hashcat -m 0 -a 3 hash ?d*length --skip lower --limit upper
         """
         TEMPORARY IMPLEMENTATION only to simulate a job taking time to complete
         """
@@ -87,7 +88,7 @@ class Worker:
         if tempFailOrResult == 1:
             crackedHash = 'salasana'
             logging.info(f'Job {jobId} finished with result: {crackedHash}')
-            self.handle_response(f'{self.nodeId}:RESULT:{jobId}={crackedHash}'.encode(), address)
+            self.handle_response(f'{self.nodeId}:RESULT:{jobId};{crackedHash}'.encode(), address)
         # Failed to crack
         else:
             logging.info(f'Job {jobId} failed')

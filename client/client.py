@@ -43,6 +43,7 @@ if __name__ == '__main__':
     client = Client('localhost', 9090) #sys.argv[1], sys.argv[2], sys.argv[3]) #
     serverStatus = 'UNKNOWN'
     hashToCrack = 'asdf'
+    passwordLength = 4
 
     print('Checking if server is up')
     # Try to establish connection with the server
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     print('Checking if server is accepting jobs')
     while True:
         try:
-            client.send(f'{client.clientId}:JOB:{hashToCrack}')
+            client.send(f'{client.clientId}:JOB:{hashToCrack};{passwordLength}')
             if client.receive()[0] == 'ACK_JOB':
                 break
         except Exception as e:

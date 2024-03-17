@@ -15,6 +15,13 @@ class Server:
     availableWorkers = {}
     # Dict of active workers (node ID: job ID)
     activeWorkers = {}
+    # Amount of possible combinations for different password lengths based on hashcat --keyspace
+    keyspaces = {
+        '3': 9025,
+        '4': 857375,                                                                                                        
+        '5': 81450625,
+        '6': 81450625
+    }
 
     # Initialize the server class
     def __init__(self, address, port):
@@ -54,7 +61,7 @@ class Server:
 
         # Worker has cracked the hash
         elif requestCommand == 'RESULT':
-            jobId, result = payload.split('=')
+            jobId, result = payload.split(';')
             logging.info(f'Job result: {payload} from {requestNodeId} {self.workerNodes[requestNodeId]}')
             self.jobs[jobId] = result
 
@@ -161,15 +168,26 @@ class Server:
             
             # Check if any workers are currently available
             if len(self.availableWorkers) == 0:
-                logging.warning('All workers are busy')
+                logging.info('All workers busy')
 
             # Inform the client that the job was received
             self.handle_response(f'{requestNodeId}:ACK_JOB:'.encode(), address)
 
+            # Incoming JOB payload is in the form of clientId:JOB:hashToCrack;passwordLength
+            hashToCrack, passwordLength = payload.split(';')
+
+            # Split the job to five parts
+            limits = self.split_jobs(passwordLength)
+            print(limits)
+
             # Send the job to the available workers
-            # TODO: Implement splitting the job to multiple workers
+            i = 0
             for workerNodeId in self.availableWorkers:
-                self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], payload)
+                # Make sure we only send the job to five workers
+                if i > 4:
+                    break
+                self.send_jobs(workerNodeId, self.workerNodes[workerNodeId], hashToCrack, limits[i][0], limits[i][1], passwordLength)
+                i += 1
 
         # No workers have joined
         else:
@@ -177,19 +195,35 @@ class Server:
             logging.warning('No workers joined')
             self.handle_response(f'{requestNodeId}:ERROR:No available workers'.encode(), address)
 
-    # Split the job to multiple workers
-    def split_job(self):
-        pass
-    
     # Send the job to the worker
-    def send_jobs(self, nodeId, nodeAddress, hashToCrack):
+    def send_jobs(self, nodeId, nodeAddress, hashToCrack, lowerLimit, upperLimit, passwordLength):
         # Send the job to the worker
-        logging.info(f'Sending job to: {nodeId} {nodeAddress}')
-        self.handle_response(f'{nodeId}:JOB:{self.activeWorkers[nodeId]}={hashToCrack}'.encode(), nodeAddress)
+        logging.info(f'Sending job to: {nodeId} {nodeAddress} with iterations from {lowerLimit} to {upperLimit}')
+        self.handle_response(
+            f'{nodeId}:JOB:{self.availableWorkers[nodeId]};{hashToCrack};{lowerLimit};{upperLimit};{passwordLength}'.encode(), nodeAddress
+        )
         # Receive acknowledgment for the job
         data, nodeAddress = self.serverSocket.recvfrom(1024)
         # Handle request
         self.handle_request(data, nodeAddress)
+    
+    # Split a job to five parts
+    def split_jobs(self, passwordLength):
+        # Divide the keyspace into 5 parts
+        iterationsPerWorker = self.keyspaces[passwordLength] // 5
+        # List of lower and upper limits of iterations
+        limits = []
+        # Initialize the upper limit of iterations as -1 for first loop
+        upperLimit = -1
+        # Loop from 1 to 5
+        for i in range(1,6):
+            # Calculate the lower and upper limits of iterations
+            # For example, if the password length is 3, the ranges will be:
+            # 0...1805, 1806...3610, 3611..5415, 5416...7220, 7221...9025
+            lowerLimit = upperLimit + 1
+            upperLimit = i * iterationsPerWorker
+            limits.append((lowerLimit, upperLimit))
+        return limits
 
     # Abort all active workers
     def handle_abort(self):
