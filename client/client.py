@@ -64,8 +64,9 @@ if __name__ == '__main__':
             if serverStatus == 'PONG':
                 break
         except Exception as e:
-            if i > 4:
+            if i >= 4:
                 print('Server unavailable, terminating client')
+                time.sleep(2)
                 sys.exit(1)
             print('Server unavailable, retrying in 5 seconds')
             time.sleep(5)
@@ -81,8 +82,9 @@ if __name__ == '__main__':
                 break
             print('Server not accepting jobs, retrying in 5 seconds')
         except Exception as e:
-            if i > 4:
+            if i >= 4:
                 print('Server unavailable, terminating client')
+                time.sleep(2)
                 sys.exit(1)
             print('Server not responding, retrying in 5 seconds')
         time.sleep(5)

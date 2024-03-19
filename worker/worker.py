@@ -77,7 +77,7 @@ class Worker:
             # Check if the job has been aborted, stop running if it has
             if self.shouldAbort.is_set():
                 break
-            randomInteger = random.randint(0, 50)
+            randomInteger = random.randint(0, 20)
             time.sleep(randomInteger // 5)
 
         if randomInteger == 1:
@@ -129,8 +129,9 @@ class Worker:
                 if data.decode().split(':')[1] == 'ACK':
                     break
             except Exception as e:
-                if i > 4:
+                if i >= 4:
                     print('Server unavailable, terminating client')
+                    time.sleep(2)
                     sys.exit(1)
                 print('Server unavailable, retrying in 5 seconds')
                 logging.warning(f'Failed to connect to server at {self.serverAddress}: {e}')

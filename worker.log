@@ -1,319 +1,120 @@
-2024-03-17 22:55:30,225:INFO:Starting worker
-2024-03-17 22:55:30,225:INFO:Starting worker
-2024-03-17 22:55:30,225:INFO:Starting worker
-2024-03-17 22:55:30,225:INFO:Starting worker
-2024-03-17 22:55:30,239:INFO:Trying to establish connection with server at ('localhost', 9090)
-2024-03-17 22:55:30,239:INFO:Trying to establish connection with server at ('localhost', 9090)
-2024-03-17 22:55:30,240:INFO:Trying to establish connection with server at ('localhost', 9090)
-2024-03-17 22:55:30,240:INFO:Trying to establish connection with server at ('localhost', 9090)
-2024-03-17 22:55:30,240:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
-2024-03-17 22:55:30,240:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
-2024-03-17 22:55:30,240:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
-2024-03-17 22:55:30,248:INFO::Node[0]: Received: 02d51043:ACK: from ('127.0.0.1', 9090)
-2024-03-17 22:55:30,249:INFO::Node[02d51043]: Connected to server at ('localhost', 9090)
-2024-03-17 22:55:30,249:INFO::Node[0]: Received: e2cc215a:ACK: from ('127.0.0.1', 9090)
-2024-03-17 22:55:30,249:INFO::Node[e2cc215a]: Connected to server at ('localhost', 9090)
-2024-03-17 22:55:30,250:INFO::Node[0]: Received: 61068bdc:ACK: from ('127.0.0.1', 9090)
-2024-03-17 22:55:30,250:INFO::Node[61068bdc]: Connected to server at ('localhost', 9090)
-2024-03-17 22:55:30,250:INFO::Node[0]: Received: 793f9c4b:ACK: from ('127.0.0.1', 9090)
-2024-03-17 22:55:30,251:INFO::Node[793f9c4b]: Connected to server at ('localhost', 9090)
-2024-03-17 22:55:30,277:INFO:Starting worker
-2024-03-17 22:55:30,277:INFO:Trying to establish connection with server at ('localhost', 9090)
-2024-03-17 22:55:30,277:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
-2024-03-17 22:55:30,285:INFO::Node[0]: Received: 8fae01f0:ACK: from ('127.0.0.1', 9090)
-2024-03-17 22:55:30,285:INFO::Node[8fae01f0]: Connected to server at ('localhost', 9090)
-2024-03-17 22:55:37,096:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,096:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,096:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,096:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,096:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,096:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,113:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,113:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,114:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,114:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,115:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:1dac398a;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,116:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,117:INFO::Node[02d51043]: Received: 02d51043:JOB:1dac398a;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,117:INFO::Node[e2cc215a]: Starting job with ID 1dac398a and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:37,117:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,117:INFO::Node[61068bdc]: Received: 61068bdc:JOB:1dac398a;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,117:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,118:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:1dac398a;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,119:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,120:INFO::Node[61068bdc]: Starting job with ID 1dac398a and hash 343d9040a671c45832ee5381860e2996
-5;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,120:INFO::Node[02d51043]: Starting job with ID 1dac398a and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:37,120:INFO::Node02d51043 Job 1dac398a finished with result: Psw123
-2024-03-17 22:55:37,120:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,120:INFO::Node[02d51043]: Sending: 02d51043:RESULT:1dac398a;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:37,121:INFO::Node[793f9c4b]: Starting job with ID 1dac398a and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:37,122:INFO::Node[8fae01f0]: Starting job with ID 1dac398a and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:37,122:INFO::Node[e2cc215a]: Received: e2cc215a:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,122:INFO::Node[e2cc215a]: Aborting job
-2024-03-17 22:55:37,124:INFO::Node[61068bdc]: Received: 61068bdc:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,124:INFO::Node[793f9c4b]: Received: 793f9c4b:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,124:INFO::Node[61068bdc]: Aborting job
-2024-03-17 22:55:37,124:INFO::Node[793f9c4b]: Aborting job
-2024-03-17 22:55:37,124:INFO::Node[8fae01f0]: Received: 8fae01f0:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:37,124:INFO::Node[8fae01f0]: Aborting job
-2024-03-17 22:55:39,131:INFO::Node[8fae01f0]: Job 1dac398a aborted
-2024-03-17 22:55:39,131:INFO::Node[793f9c4b]: Job 1dac398a aborted
-2024-03-17 22:55:39,131:INFO::Node[61068bdc]: Job 1dac398a aborted
-2024-03-17 22:55:39,131:INFO::Node[8fae01f0]: Sending: 8fae01f0:ABORT:1dac398a to ('127.0.0.1', 9090)
-2024-03-17 22:55:39,131:INFO::Node[793f9c4b]: Sending: 793f9c4b:ABORT:1dac398a to ('127.0.0.1', 9090)
-2024-03-17 22:55:39,131:INFO::Node[61068bdc]: Sending: 61068bdc:ABORT:1dac398a to ('127.0.0.1', 9090)
-2024-03-17 22:55:40,121:INFO::Node[e2cc215a]: Job 1dac398a aborted
-2024-03-17 22:55:40,121:INFO::Node[e2cc215a]: Sending: e2cc215a:ABORT:1dac398a to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,202:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,203:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,203:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,204:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,205:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,205:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,205:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,205:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,208:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,208:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,210:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:d1dc7729;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,210:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[e2cc215a]: Starting job with ID d1dc7729 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:45,211:INFO::Nodee2cc215a Job d1dc7729 finished with result: Psw123
-2024-03-17 22:55:45,211:INFO::Node[e2cc215a]: Sending: e2cc215a:RESULT:d1dc7729;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[02d51043]: Received: 02d51043:JOB:d1dc7729;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[61068bdc]: Received: 61068bdc:JOB:d1dc7729;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[02d51043]: Starting job with ID d1dc7729 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:45,211:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[02d51043]: Sending: 02d51043:FAIL:d1dc7729 to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,211:INFO::Node[61068bdc]: Starting job with ID d1dc7729 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:45,215:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:d1dc7729;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,215:INFO::Node[02d51043]: Received: 02d51043:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,216:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,216:INFO::Node[02d51043]: Aborting job
-2024-03-17 22:55:45,216:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:d1dc7729;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:45,216:INFO::Node[793f9c4b]: Starting job with ID d1dc7729 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:45,217:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:45,217:INFO::Node[8fae01f0]: Starting job with ID d1dc7729 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:52,537:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:52,538:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:52,539:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:52,539:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:52,540:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:52,541:INFO::Node[61068bdc]: Sending: 61068bdc:BUSY: to ('127.0.0.1', 9090)
-2024-03-17 22:55:52,542:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:52,542:INFO::Node[793f9c4b]: Sending: 793f9c4b:BUSY: to ('127.0.0.1', 9090)
-2024-03-17 22:55:52,543:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:52,545:INFO::Node[8fae01f0]: Sending: 8fae01f0:BUSY: to ('127.0.0.1', 9090)
-2024-03-17 22:55:53,235:INFO::Node8fae01f0 Job d1dc7729 finished with result: Psw123
-2024-03-17 22:55:53,235:INFO::Node[8fae01f0]: Sending: 8fae01f0:RESULT:d1dc7729;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:53,235:INFO::Node[61068bdc]: Received: 61068bdc:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:53,235:INFO::Node[793f9c4b]: Received: 793f9c4b:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:53,235:INFO::Node[61068bdc]: Aborting job
-2024-03-17 22:55:53,235:INFO::Node[793f9c4b]: Aborting job
-2024-03-17 22:55:55,231:INFO::Node[61068bdc]: Job d1dc7729 aborted
-2024-03-17 22:55:55,231:INFO::Node[61068bdc]: Sending: 61068bdc:ABORT:d1dc7729 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,232:INFO::Node[793f9c4b]: Job d1dc7729 aborted
-2024-03-17 22:55:57,232:INFO::Node[793f9c4b]: Sending: 793f9c4b:ABORT:d1dc7729 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,550:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,550:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,552:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,552:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,552:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,552:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,553:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,553:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,555:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,555:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,557:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:a9960eaa;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,557:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,558:INFO::Node[02d51043]: Received: 02d51043:JOB:a9960eaa;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,559:INFO::Nodee2cc215a Job a9960eaa finished with result: Psw123
-2024-03-17 22:55:57,559:INFO::Node[e2cc215a]: Sending: e2cc215a:RESULT:a9960eaa;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,559:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,559:INFO::Node[61068bdc]: Received: 61068bdc:JOB:a9960eaa;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,560:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,560:INFO::Node[02d51043]: Starting job with ID a9960eaa and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:57,560:INFO::Node02d51043 Job a9960eaa finished with result: Psw123
-2024-03-17 22:55:57,561:INFO::Node[02d51043]: Sending: 02d51043:RESULT:a9960eaa;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,561:INFO::Node[02d51043]: Received: 02d51043:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,561:INFO::Node[61068bdc]: Starting job with ID a9960eaa and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:57,561:INFO::Node61068bdc Job a9960eaa finished with result: Psw123
-2024-03-17 22:55:57,561:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:a9960eaa;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,562:INFO::Node[02d51043]: Aborting job
-2024-03-17 22:55:57,562:INFO::Node[61068bdc]: Sending: 61068bdc:RESULT:a9960eaa;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,562:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,563:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:a9960eaa;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,563:INFO::Node[793f9c4b]: Starting job with ID a9960eaa and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:57,563:INFO::Node793f9c4b Job a9960eaa finished with result: Psw123
-2024-03-17 22:55:57,563:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,563:INFO::Node[793f9c4b]: Sending: 793f9c4b:RESULT:a9960eaa;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:55:57,564:INFO::Node[61068bdc]: Received: 61068bdc:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,564:INFO::Node[8fae01f0]: Starting job with ID a9960eaa and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:55:57,564:INFO::Node[793f9c4b]: Received: 793f9c4b:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,564:INFO::Node[61068bdc]: Aborting job
-2024-03-17 22:55:57,564:INFO::Node[793f9c4b]: Aborting job
-2024-03-17 22:55:57,565:INFO::Node[8fae01f0]: Received: 8fae01f0:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:55:57,565:INFO::Node[8fae01f0]: Aborting job
-2024-03-17 22:55:59,577:INFO::Node[8fae01f0]: Job a9960eaa aborted
-2024-03-17 22:55:59,577:INFO::Node[8fae01f0]: Sending: 8fae01f0:ABORT:a9960eaa to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,301:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,301:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,302:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,302:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,303:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,303:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,305:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,305:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,306:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,306:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,307:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:3e3cebfc;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,308:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,310:INFO::Node[e2cc215a]: Starting job with ID 3e3cebfc and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:07,311:INFO::Node[02d51043]: Received: 02d51043:JOB:3e3cebfc;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,311:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,312:INFO::Node[61068bdc]: Received: 61068bdc:JOB:3e3cebfc;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,312:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,312:INFO::Node[02d51043]: Starting job with ID 3e3cebfc and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:07,313:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:3e3cebfc;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,313:INFO::Node[61068bdc]: Starting job with ID 3e3cebfc and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:07,313:INFO::Node[61068bdc]: Job 3e3cebfc unsuccessful
-2024-03-17 22:56:07,314:INFO::Node[61068bdc]: Sending: 61068bdc:FAIL:3e3cebfc to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,314:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,314:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:3e3cebfc;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,316:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,316:INFO::Node[793f9c4b]: Starting job with ID 3e3cebfc and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:07,316:INFO::Node[8fae01f0]: Starting job with ID 3e3cebfc and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:07,316:INFO::Node[793f9c4b]: Job 3e3cebfc unsuccessful
-2024-03-17 22:56:07,316:INFO::Node8fae01f0 Job 3e3cebfc finished with result: Psw123
-2024-03-17 22:56:07,317:INFO::Node[793f9c4b]: Sending: 793f9c4b:FAIL:3e3cebfc to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,317:INFO::Node[8fae01f0]: Sending: 8fae01f0:RESULT:3e3cebfc;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:56:07,319:INFO::Node[e2cc215a]: Received: e2cc215a:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,319:INFO::Node[e2cc215a]: Aborting job
-2024-03-17 22:56:07,319:INFO::Node[02d51043]: Received: 02d51043:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:07,320:INFO::Node[02d51043]: Aborting job
-2024-03-17 22:56:12,318:INFO::Node[02d51043]: Job 3e3cebfc aborted
-2024-03-17 22:56:12,318:INFO::Node[e2cc215a]: Job 3e3cebfc aborted
-2024-03-17 22:56:12,319:INFO::Node[02d51043]: Sending: 02d51043:ABORT:3e3cebfc to ('127.0.0.1', 9090)
-2024-03-17 22:56:12,319:INFO::Node[e2cc215a]: Sending: e2cc215a:ABORT:3e3cebfc to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,724:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,724:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,725:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,725:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,726:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,726:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,727:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,728:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,729:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,729:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,731:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:75420354;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,732:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,733:INFO::Node[02d51043]: Received: 02d51043:JOB:75420354;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,733:INFO::Node[e2cc215a]: Starting job with ID 75420354 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:26,733:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,734:INFO::Node[61068bdc]: Received: 61068bdc:JOB:75420354;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,734:INFO::Node[02d51043]: Starting job with ID 75420354 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:26,735:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:75420354;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,735:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,735:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,737:INFO::Node[61068bdc]: Starting job with ID 75420354 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:26,737:INFO::Node[793f9c4b]: Starting job with ID 75420354 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:26,737:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:75420354;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:26,737:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:26,738:INFO::Node[8fae01f0]: Starting job with ID 75420354 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:29,747:INFO::Node02d51043 Job 75420354 finished with result: Psw123
-2024-03-17 22:56:29,747:INFO::Node[02d51043]: Sending: 02d51043:RESULT:75420354;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:56:29,747:INFO::Node[e2cc215a]: Received: e2cc215a:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:29,747:INFO::Node[e2cc215a]: Aborting job
-2024-03-17 22:56:29,747:INFO::Node[61068bdc]: Received: 61068bdc:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:29,749:INFO::Node[61068bdc]: Aborting job
-9c4b:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:29,751:INFO::Node[793f9c4b]: Aborting job
-2024-03-17 22:56:29,752:INFO::Node[8fae01f0]: Received: 8fae01f0:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:29,752:INFO::Node[8fae01f0]: Aborting job
-2024-03-17 22:56:30,734:INFO::Node[e2cc215a]: Job 75420354 aborted
-2024-03-17 22:56:30,735:INFO::Node[e2cc215a]: Sending: e2cc215a:ABORT:75420354 to ('127.0.0.1', 9090)
-2024-03-17 22:56:30,748:INFO::Node[61068bdc]: Job 75420354 aborted
-2024-03-17 22:56:30,750:INFO::Node[61068bdc]: Sending: 61068bdc:ABORT:75420354 to ('127.0.0.1', 9090)
-2024-03-17 22:56:32,753:INFO::Node[8fae01f0]: Job 75420354 aborted
-2024-03-17 22:56:32,755:INFO::Node[8fae01f0]: Sending: 8fae01f0:ABORT:75420354 to ('127.0.0.1', 9090)
-2024-03-17 22:56:33,753:INFO::Node[793f9c4b]: Job 75420354 aborted
-2024-03-17 22:56:33,753:INFO::Node[793f9c4b]: Sending: 793f9c4b:ABORT:75420354 to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,876:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,877:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,878:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,878:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,879:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,880:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,881:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,882:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,883:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,884:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,885:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:900d4ef5;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,885:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,886:INFO::Node[e2cc215a]: Starting job with ID 900d4ef5 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:39,886:INFO::Node[02d51043]: Received: 02d51043:JOB:900d4ef5;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,886:INFO::Node[e2cc215a]: Job 900d4ef5 unsuccessful
-2024-03-17 22:56:39,887:INFO::Node[e2cc215a]: Sending: e2cc215a:FAIL:900d4ef5 to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,887:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,888:INFO::Node[61068bdc]: Received: 61068bdc:JOB:900d4ef5;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,888:INFO::Node[02d51043]: Starting job with ID 900d4ef5 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:39,888:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,889:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:900d4ef5;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,890:INFO::Node[61068bdc]: Starting job with ID 900d4ef5 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:39,889:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,890:INFO::Node61068bdc Job 900d4ef5 finished with result: Psw123
-2024-03-17 22:56:39,890:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:900d4ef5;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,890:INFO::Node[61068bdc]: Sending: 61068bdc:RESULT:900d4ef5;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,890:INFO::Node[793f9c4b]: Starting job with ID 900d4ef5 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:39,891:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,891:INFO::Node[8fae01f0]: Starting job with ID 900d4ef5 and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:56:39,891:INFO::Node8fae01f0 Job 900d4ef5 finished with result: Psw123
-2024-03-17 22:56:39,891:INFO::Node[02d51043]: Received: 02d51043:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,892:INFO::Node[8fae01f0]: Sending: 8fae01f0:RESULT:900d4ef5;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:56:39,892:INFO::Node[02d51043]: Aborting job
-2024-03-17 22:56:39,892:INFO::Node[793f9c4b]: Received: 793f9c4b:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,892:INFO::Node[793f9c4b]: Aborting job
-2024-03-17 22:56:39,892:INFO::Node[8fae01f0]: Received: 8fae01f0:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:56:39,894:INFO::Node[8fae01f0]: Aborting job
-2024-03-17 22:56:42,898:INFO::Node[02d51043]: Job 900d4ef5 aborted
-2024-03-17 22:56:42,899:INFO::Node[02d51043]: Sending: 02d51043:ABORT:900d4ef5 to ('127.0.0.1', 9090)
-2024-03-17 22:56:44,902:INFO::Node[793f9c4b]: Job 900d4ef5 aborted
-2024-03-17 22:56:44,903:INFO::Node[793f9c4b]: Sending: 793f9c4b:ABORT:900d4ef5 to ('127.0.0.1', 9090)
-2024-03-17 22:56:59,996:INFO::Node[e2cc215a]: Received: e2cc215a:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:59,997:INFO::Node[e2cc215a]: Sending: e2cc215a:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:56:59,999:INFO::Node[02d51043]: Received: 02d51043:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:56:59,999:INFO::Node[02d51043]: Sending: 02d51043:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,000:INFO::Node[61068bdc]: Received: 61068bdc:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,000:INFO::Node[61068bdc]: Sending: 61068bdc:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,001:INFO::Node[793f9c4b]: Received: 793f9c4b:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,002:INFO::Node[793f9c4b]: Sending: 793f9c4b:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,003:INFO::Node[8fae01f0]: Received: 8fae01f0:PING: from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,003:INFO::Node[8fae01f0]: Sending: 8fae01f0:IDLE: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,004:INFO::Node[e2cc215a]: Received: e2cc215a:JOB:9d8d7d4e;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,004:INFO::Node[e2cc215a]: Sending: e2cc215a:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,007:INFO::Node[61068bdc]: Received: 61068bdc:JOB:9d8d7d4e;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,008:INFO::Node[e2cc215a]: Starting job with ID 9d8d7d4e and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:57:00,010:INFO::Node[61068bdc]: Sending: 61068bdc:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,011:INFO::Node[02d51043]: Received: 02d51043:JOB:9d8d7d4e;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,011:INFO::Node[02d51043]: Sending: 02d51043:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,012:INFO::Node[61068bdc]: Starting job with ID 9d8d7d4e and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:57:00,013:INFO::Node[02d51043]: Starting job with ID 9d8d7d4e and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:57:00,014:INFO::Node[793f9c4b]: Received: 793f9c4b:JOB:9d8d7d4e;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,015:INFO::Node[793f9c4b]: Sending: 793f9c4b:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,017:INFO::Node[793f9c4b]: Starting job with ID 9d8d7d4e and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:57:00,018:INFO::Node[793f9c4b]: Job 9d8d7d4e unsuccessful
-2024-03-17 22:57:00,018:INFO::Node[793f9c4b]: Sending: 793f9c4b:FAIL:9d8d7d4e to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,019:INFO::Node[8fae01f0]: Received: 8fae01f0:JOB:9d8d7d4e;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
-2024-03-17 22:57:00,020:INFO::Node[8fae01f0]: Sending: 8fae01f0:ACK_JOB: to ('127.0.0.1', 9090)
-2024-03-17 22:57:00,023:INFO::Node[8fae01f0]: Starting job with ID 9d8d7d4e and hash 343d9040a671c45832ee5381860e2996
-2024-03-17 22:57:03,025:INFO::Node[61068bdc]: Job 9d8d7d4e unsuccessful
-2024-03-17 22:57:03,025:INFO::Node[61068bdc]: Sending: 61068bdc:FAIL:9d8d7d4e to ('127.0.0.1', 9090)
-2024-03-17 22:57:05,018:INFO::Node[e2cc215a]: Job 9d8d7d4e unsuccessful
-2024-03-17 22:57:05,018:INFO::Node[e2cc215a]: Sending: e2cc215a:FAIL:9d8d7d4e to ('127.0.0.1', 9090)
-2024-03-17 22:57:28,127:INFO::Node8fae01f0 Job 9d8d7d4e finished with result: Psw123
-2024-03-17 22:57:28,127:INFO::Node[8fae01f0]: Sending: 8fae01f0:RESULT:9d8d7d4e;Psw123 to ('127.0.0.1', 9090)
-2024-03-17 22:57:28,128:INFO::Node[02d51043]: Received: 02d51043:ABORT: from ('127.0.0.1', 9090)
-2024-03-17 22:57:28,128:INFO::Node[02d51043]: Aborting job
-2024-03-17 22:57:29,095:INFO::Node[02d51043]: Job 9d8d7d4e aborted
-2024-03-17 22:57:29,095:INFO::Node[02d51043]: Sending: 02d51043:ABORT:9d8d7d4e to ('127.0.0.1', 9090)
+2024-03-19 13:27:32,258:INFO:Starting worker
+2024-03-19 13:27:32,258:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:27:32,258:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:27:32,269:INFO::Node[0]: Received: 7c253347:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:27:32,269:INFO::Node[7c253347]: Connected to server at ('localhost', 9090)
+2024-03-19 13:27:32,896:INFO:Starting worker
+2024-03-19 13:27:32,896:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:27:32,896:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:27:32,896:INFO::Node[0]: Received: 0e5bffd3:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:27:32,896:INFO::Node[0e5bffd3]: Connected to server at ('localhost', 9090)
+2024-03-19 13:27:33,443:INFO:Starting worker
+2024-03-19 13:27:33,443:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:27:33,443:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:27:33,488:INFO::Node[0]: Received: 524a525b:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:27:33,488:INFO::Node[524a525b]: Connected to server at ('localhost', 9090)
+2024-03-19 13:27:34,011:INFO:Starting worker
+2024-03-19 13:27:34,011:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:27:34,011:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:27:34,011:INFO::Node[0]: Received: 14ddc5bb:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:27:34,011:INFO::Node[14ddc5bb]: Connected to server at ('localhost', 9090)
+2024-03-19 13:27:34,497:INFO:Starting worker
+2024-03-19 13:27:34,497:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:27:34,497:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:27:34,497:INFO::Node[0]: Received: 8990ef00:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:27:34,497:INFO::Node[8990ef00]: Connected to server at ('localhost', 9090)
+2024-03-19 13:28:09,480:INFO::Node[7c253347]: Received: 7c253347:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,482:INFO::Node[7c253347]: Sending: 7c253347:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,483:INFO::Node[0e5bffd3]: Received: 0e5bffd3:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,484:INFO::Node[0e5bffd3]: Sending: 0e5bffd3:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,484:INFO::Node[524a525b]: Received: 524a525b:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,485:INFO::Node[524a525b]: Sending: 524a525b:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,486:INFO::Node[14ddc5bb]: Received: 14ddc5bb:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,486:INFO::Node[14ddc5bb]: Sending: 14ddc5bb:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,487:INFO::Node[8990ef00]: Received: 8990ef00:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,488:INFO::Node[8990ef00]: Sending: 8990ef00:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,489:INFO::Node[7c253347]: Received: 7c253347:JOB:a7889337;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,490:INFO::Node[7c253347]: Sending: 7c253347:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,493:INFO::Node[0e5bffd3]: Received: 0e5bffd3:JOB:a7889337;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,493:INFO::Node[524a525b]: Received: 524a525b:JOB:a7889337;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,493:INFO::Node[7c253347]: Starting job with ID a7889337 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:28:09,493:INFO::Node[0e5bffd3]: Sending: 0e5bffd3:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,493:INFO::Node[524a525b]: Sending: 524a525b:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,496:INFO::Node[524a525b]: Starting job with ID a7889337 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:28:09,496:INFO::Node[14ddc5bb]: Received: 14ddc5bb:JOB:a7889337;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,497:INFO::Node[0e5bffd3]: Starting job with ID a7889337 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:28:09,497:INFO::Node[8990ef00]: Received: 8990ef00:JOB:a7889337;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
+2024-03-19 13:28:09,497:INFO::Node[14ddc5bb]: Sending: 14ddc5bb:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,497:INFO::Node[8990ef00]: Sending: 8990ef00:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:28:09,497:INFO::Node[14ddc5bb]: Starting job with ID a7889337 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:28:09,497:INFO::Node[8990ef00]: Starting job with ID a7889337 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:28:17,512:INFO::Node[8990ef00]: Job a7889337 unsuccessful
+2024-03-19 13:28:17,512:INFO::Node[8990ef00]: Sending: 8990ef00:FAIL:a7889337 to ('127.0.0.1', 9090)
+2024-03-19 13:29:26,638:INFO::Node[0e5bffd3]: Job a7889337 unsuccessful
+2024-03-19 13:29:26,639:INFO::Node[0e5bffd3]: Sending: 0e5bffd3:FAIL:a7889337 to ('127.0.0.1', 9090)
+2024-03-19 13:30:04,716:INFO::Node[14ddc5bb]: Job a7889337 unsuccessful
+2024-03-19 13:30:04,716:INFO::Node[14ddc5bb]: Sending: 14ddc5bb:FAIL:a7889337 to ('127.0.0.1', 9090)
+2024-03-19 13:32:50,006:INFO:Starting worker
+2024-03-19 13:32:50,006:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:32:50,006:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:32:50,006:INFO::Node[0]: Received: 5c64cfa6:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:32:50,006:INFO::Node[5c64cfa6]: Connected to server at ('localhost', 9090)
+2024-03-19 13:32:50,552:INFO:Starting worker
+2024-03-19 13:32:50,552:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:32:50,552:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:32:50,552:INFO::Node[0]: Received: 92893341:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:32:50,552:INFO::Node[92893341]: Connected to server at ('localhost', 9090)
+2024-03-19 13:32:51,305:INFO:Starting worker
+2024-03-19 13:32:51,305:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:32:51,305:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:32:51,305:INFO::Node[0]: Received: 8774b291:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:32:51,305:INFO::Node[8774b291]: Connected to server at ('localhost', 9090)
+2024-03-19 13:32:51,901:INFO:Starting worker
+2024-03-19 13:32:51,901:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:32:51,901:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:32:51,917:INFO::Node[0]: Received: 1f75de0e:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:32:51,917:INFO::Node[1f75de0e]: Connected to server at ('localhost', 9090)
+2024-03-19 13:32:52,411:INFO:Starting worker
+2024-03-19 13:32:52,412:INFO:Trying to establish connection with server at ('localhost', 9090)
+2024-03-19 13:32:52,412:INFO::Node[0]: Sending: 0:JOIN: to ('localhost', 9090)
+2024-03-19 13:32:52,420:INFO::Node[0]: Received: dc205205:ACK: from ('127.0.0.1', 9090)
+2024-03-19 13:32:52,420:INFO::Node[dc205205]: Connected to server at ('localhost', 9090)
+2024-03-19 13:32:57,700:INFO::Node[5c64cfa6]: Received: 5c64cfa6:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,700:INFO::Node[5c64cfa6]: Sending: 5c64cfa6:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,700:INFO::Node[92893341]: Received: 92893341:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,712:INFO::Node[92893341]: Sending: 92893341:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,712:INFO::Node[8774b291]: Received: 8774b291:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[8774b291]: Sending: 8774b291:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[1f75de0e]: Received: 1f75de0e:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[1f75de0e]: Sending: 1f75de0e:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[dc205205]: Received: dc205205:PING: from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[dc205205]: Sending: dc205205:IDLE: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[5c64cfa6]: Received: 5c64cfa6:JOB:21953bb3;343d9040a671c45832ee5381860e2996;0;1805;3 from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[5c64cfa6]: Sending: 5c64cfa6:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[92893341]: Received: 92893341:JOB:21953bb3;343d9040a671c45832ee5381860e2996;1806;3610;3 from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[5c64cfa6]: Starting job with ID 21953bb3 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:32:57,716:INFO::Node[92893341]: Sending: 92893341:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[8774b291]: Received: 8774b291:JOB:21953bb3;343d9040a671c45832ee5381860e2996;3611;5415;3 from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[8774b291]: Sending: 8774b291:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[1f75de0e]: Received: 1f75de0e:JOB:21953bb3;343d9040a671c45832ee5381860e2996;5416;7220;3 from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[92893341]: Starting job with ID 21953bb3 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:32:57,716:INFO::Node[1f75de0e]: Sending: 1f75de0e:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[dc205205]: Received: dc205205:JOB:21953bb3;343d9040a671c45832ee5381860e2996;7221;9025;3 from ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[8774b291]: Starting job with ID 21953bb3 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:32:57,716:INFO::Node[dc205205]: Sending: dc205205:ACK_JOB: to ('127.0.0.1', 9090)
+2024-03-19 13:32:57,716:INFO::Node[1f75de0e]: Starting job with ID 21953bb3 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:32:57,732:INFO::Node[dc205205]: Starting job with ID 21953bb3 and hash 343d9040a671c45832ee5381860e2996
+2024-03-19 13:32:57,732:INFO::Node[dc205205]: Job 21953bb3 unsuccessful
+2024-03-19 13:32:57,732:INFO::Node[dc205205]: Sending: dc205205:FAIL:21953bb3 to ('127.0.0.1', 9090)
+2024-03-19 13:33:02,755:INFO::Node[92893341]: Job 21953bb3 unsuccessful
+2024-03-19 13:33:02,756:INFO::Node[92893341]: Sending: 92893341:FAIL:21953bb3 to ('127.0.0.1', 9090)
+2024-03-19 13:33:04,752:INFO::Node8774b291 Job 21953bb3 finished with result: Psw123
+2024-03-19 13:33:04,752:INFO::Node[8774b291]: Sending: 8774b291:RESULT:21953bb3;Psw123 to ('127.0.0.1', 9090)
+2024-03-19 13:33:04,752:INFO::Node[5c64cfa6]: Received: 5c64cfa6:ABORT: from ('127.0.0.1', 9090)
+2024-03-19 13:33:04,752:INFO::Node[5c64cfa6]: Aborting job
+2024-03-19 13:33:04,752:INFO::Node[1f75de0e]: Received: 1f75de0e:ABORT: from ('127.0.0.1', 9090)
+2024-03-19 13:33:04,752:INFO::Node[1f75de0e]: Aborting job
+2024-03-19 13:33:05,746:INFO::Node[1f75de0e]: Job 21953bb3 aborted
+2024-03-19 13:33:05,746:INFO::Node[1f75de0e]: Sending: 1f75de0e:ABORT:21953bb3 to ('127.0.0.1', 9090)
+2024-03-19 13:33:05,761:INFO::Node[5c64cfa6]: Job 21953bb3 aborted
+2024-03-19 13:33:05,761:INFO::Node[5c64cfa6]: Sending: 5c64cfa6:ABORT:21953bb3 to ('127.0.0.1', 9090)
